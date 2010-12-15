@@ -13,7 +13,7 @@ It supports chaining several requests which is very useful in RESTful applicatio
 Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials, then call one of the content type specific methods.
 The idea is that the method name will convey the expected content type you can then operate on.
  
-Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code:
+Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code::
   
  	Resty r = new Resty();
 	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").get("postalcodes[0].placeName");
@@ -26,15 +26,20 @@ Status
 
 Infancy - only support for GET on json objects. Path expressions allow simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!)
 
+Compile
+-------
+Use Maven 2 or 3 and build.
+
 
 Examples
 -----------
 
-Some supported path constructs.
+Some supported path constructs::
+
  store.book[price>9 && price<12.999].author
  store.book[!category='reference'].author
  
-JSON Sample:
+JSON Sample::
 
  { "store": {
     "book": [ 
