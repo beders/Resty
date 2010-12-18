@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.monoid.web</groupId>
   <artifactId>resty</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>Resty</name>
   <description>Simple Java client to talk to RESTful backends</description>
   <url>http://github.com/beders/resty</url>
