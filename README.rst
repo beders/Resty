@@ -24,7 +24,7 @@ Resty supports complex path queries to navigate into a json object.
 Status
 -------
 
-Infancy - only support for GET on json objects. Path expressions allow simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!)
+Infancy - only support for POST,GET on json objects. Path expressions allow simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!). Some plain text support
 
 Compile
 -------
