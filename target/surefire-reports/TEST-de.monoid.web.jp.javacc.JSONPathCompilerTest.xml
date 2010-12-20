@@ -22,7 +22,7 @@
     <property name="basedir" value="/Users/beders/workspace/resty"/>
     <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="surefire.real.class.path" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/surefirebooter2268582132406093238.jar"/>
+    <property name="surefire.real.class.path" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/surefirebooter509101359548554819.jar"/>
     <property name="java.io.tmpdir" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/"/>
     <property name="line.separator" value="
 "/>
@@ -66,5 +66,5 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.017" classname="de.monoid.web.jp.javacc.JSONPathCompilerTest" name="testJSONPathCompiler"/>
+  <testcase time="0.016" classname="de.monoid.web.jp.javacc.JSONPathCompilerTest" name="testJSONPathCompiler"/>
 </testsuite>

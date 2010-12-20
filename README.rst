@@ -24,11 +24,18 @@ Resty supports complex path queries to navigate into a json object.
 Status
 -------
 
-Infancy - only support for GET on json objects. Path expressions allow simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!)
+Infancy 
+- POST, GET for JSON and text/plain
+- Path expressions to access JSON: simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!)
+
+Installation
+-------------
+Either compile yourself or grab the rest-*.jar file and add it to your CLASSPATH.
+No other runtime requirements (so far).
 
 Compile
 -------
-Use Maven 2 or 3 and build.
+Use Maven 2 or 3 to build.
 
 
 Examples
