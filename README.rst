@@ -3,7 +3,7 @@ Resty
 ======
 
 Introduction
--------------
+--------------
 
 Resty is a small, convenient interface to talk to RESTful services from Java.
 
