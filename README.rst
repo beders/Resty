@@ -33,6 +33,7 @@ Installation
 Either compile yourself or grab the rest-*.jar file and add it to your CLASSPATH.
 No other runtime requirements (so far).
 
+
 Compile
 -------
 Use Maven 2 or 3 to build.
