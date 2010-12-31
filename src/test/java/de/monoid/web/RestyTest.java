@@ -1,11 +1,14 @@
 package de.monoid.web;
 
-import static de.monoid.web.Resty.path;
-import static org.junit.Assert.assertEquals;
+import static de.monoid.web.Resty.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 public class RestyTest {
+	
+	private static final String GOOGLE_QUERY_DATA = "q=Resty&hl=en&num=20";
+
 	static {
 		System.setProperty("content.types.user.table","src/test/java/de/monoid/web/mimecap.properties");
 	}
@@ -22,5 +25,22 @@ public class RestyTest {
 		assertEquals(name, "Rehlingen-Siersburg");
 	}
 	
+	@Test
+	public void formDataGet() throws Exception {
+		Resty r = new Resty();
+		String t = r.text("http://www.google.com/search?" +  GOOGLE_QUERY_DATA).toString();
+		System.out.println(t);
+		assertTrue(t.contains("resty"));
+	}
+ 
+	@Test
+	public void formDataPost() throws Exception {
+		Resty r = new Resty();
+		String t = r.text("http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echoraw.cgi",
+				form(GOOGLE_QUERY_DATA)).toString();
+		System.out.println(t);
+		assertTrue(t.contains(GOOGLE_QUERY_DATA));
+	}
+
 	
 }

@@ -4,6 +4,7 @@
 package de.monoid.web;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 
@@ -17,11 +18,13 @@ import java.net.URLConnection;
  */
 public abstract class AbstractResource extends Resty {
 	protected URLConnection urlConnection;
+	protected InputStream inputStream;
 
-	abstract void setContent(Object aContent);
-
-	void setURLConnection(URLConnection urlConnection) {
-		this.urlConnection = urlConnection;
+	abstract String getAcceptedTypes();
+	
+	void fill(URLConnection anUrlConnection) throws IOException {
+		urlConnection = anUrlConnection;
+		inputStream = anUrlConnection.getInputStream();
 	}
 
 	public URLConnection getUrlConnection() {

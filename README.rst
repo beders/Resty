@@ -13,28 +13,36 @@ It supports chaining several requests which is very useful in RESTful applicatio
 Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials, then call one of the content type specific methods.
 The idea is that the method name will convey the expected content type you can then operate on.
  
-Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code::
+Here is an example on how to use the geonames web service. It retrieves the JSON object (see json.org for details) and gets the name of a place from the zip code::
   
  	Resty r = new Resty();
 	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").get("postalcodes[0].placeName");
-	assertEquals(name, "Rehlingen-Siersburg");
  
-Resty supports complex path queries to navigate into a json object.
+Features
+--------
+- GET, POST for text, XML and JSON
+- Fluid-style API to follow hyperlinks easily
+- Complex path queries for JSON (simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!))
+- Support for XPath expressions
+- Authentication with login/passwd
+- Automatic Cookie management
 
 Status
 -------
 
-Infancy 
-- POST, GET for JSON and text/plain
-- Path expressions to access JSON: simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!)
+Infancy
+- No support for multipart/form-data yet 
+- No support for the other HTTP verbs yet
+- No explicit HTML support yet. Use text(...).toString() and feed it a parser like Jericho
+- No oauth support yet.
 
 Installation
 -------------
-Either compile yourself or grab the rest-*.jar file and add it to your CLASSPATH.
-No other runtime requirements (so far).
+Either create the JAR yourself or grab the rest-*.jar file and add it to your CLASSPATH.
+You need the org.json classes for JSON support.
 
 
-Compile
+Compile it yourself
 -------
 Use Maven 2 or 3 to build.
 
@@ -42,7 +50,32 @@ Use Maven 2 or 3 to build.
 Examples
 -----------
 
-Some supported path constructs::
+Getting location information from the geonames web service, published as JSON::
+
+	Resty r = new Resty();
+	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").
+		get("postalcodes[0].placeName");
+
+This gets a JSON object from the specified URL and extracts the first place name.
+
+Getting the Google Developer calendar feed as JSON and following the first entry, which is an XML resource,
+extracting the title tag:
+
+	Resty r = new Resty();
+	String title = r.json("http://www.google.com/calendar/feeds/developer-calendar@google.com/public/full?alt=json").
+			xml(path("feed.entry[0].id.$t")).get("entry/title/text()", String.class);
+
+The path(...) expression is used to extract a URL from the returned JSON object, which is then used to read an XML document.
+
+Getting ATOM feed from Slashdot and printing article URLs::
+
+	Resty r = new Resty();
+	NodeList nl = r.xml("http://rss.slashdot.org/Slashdot/slashdotGamesatom").get("feed/entry/link");
+	for (int i = 0, len = nl.getLength(); i < len; i++) {
+		System.out.println(((Element)nl.item(i)).getAttribute("href"));
+	}
+
+Some supported JSON path constructs::
 
  store.book[price>9 && price<12.999].author
  store.book[!category='reference'].author
@@ -55,29 +88,14 @@ JSON Sample::
         "author": "Nigel Rees",
         "title": "Sayings of the Century",
         "price": 8.95
-      },
-      { "category": "fiction",
-        "author": "Evelyn Waugh",
-        "title": "Sword of Honour",
-        "price": 12.99
-      },
-      { "category": "fiction",
-        "author": "Herman Melville",
-        "title": "Moby Dick",
-        "isbn": "0-553-21311-3",
-        "price": 8.99
-      },
-      { "category": "fiction",
-        "author": "J. R. R. Tolkien",
-        "title": "The Lord of the Rings",
-        "isbn": "0-395-19395-8",
-        "price": 22.99
-      }
-    ],
-    "bicycle": {
-      "color": "red",
-      "price": 19.95
-    }
-  }
- } 
+      }, ... ]}}
+ 
+Chaining calls to navigate JSON objects. This is useful if the JSON contains URIs to go down the rabbit hole so to say::
+
+ JSONObject json = r.
+	json("http://localhost:9999/rest/sc").
+	json(path("serviceclients[displayName='Sample'].href")).
+	json(path("workflows")).json(path("current")).json(path("levels[displayName='Incoming'].href")).
+	json(path("ruleSets[1].EngageRouting")).object();
+
  

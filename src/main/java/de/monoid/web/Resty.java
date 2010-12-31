@@ -2,14 +2,13 @@ package de.monoid.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URLConnection;
-import java.util.regex.Pattern;
+
+import javax.xml.xpath.XPathException;
 
 import org.json.JSONObject;
 
@@ -41,18 +40,22 @@ import de.monoid.web.auth.RestyAuthenticator;
  * web services following the HATEOS paradigm.
  * 
  * @author beders
- * @version 0.1 - basic GET and JSON support. basic JSONPath support
+ *
  */
 
 public class Resty {
+	protected static String MOZILLA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13";
+	protected static String DEFAULT_USER_AGENT = "Resty 0.1 (Java)";
 	static RestyAuthenticator rath = new RestyAuthenticator();
 	static {
 		// set up content handlers. note: this is not ideal as it might conflict
 		// with existing content factories
-		System.setProperty("java.content.handler.pkgs", "de.monoid.web.content.handler");
+		// got rid of it: System.setProperty("java.content.handler.pkgs", "de.monoid.web.content.handler");
 		CookieHandler.setDefault(new CookieManager());
 		Authenticator.setDefault(rath);
 	}
+
+	protected String userAgent = DEFAULT_USER_AGENT;
 
 	public Resty() {
 		// no options
@@ -82,15 +85,11 @@ public class Resty {
 		authenticate(URI.create(string), aLogin, charArray);
 	}
 
-	// public JSONResource json(Object object) throws IOException {
-	// if (object instanceof String) {
-	// return json((String)object);
-	// } else if (object instanceof URI) {
-	// return json((URI)object);
-	// }
-	// throw new IOException("Can't convert object to an URI:" + object);
-	// }
-
+	/** Sets the User-Agent to identify as Mozilla/Firefox. Otherwise a Resty specific User-Agent is used */
+	public void identifyAsMozilla() {
+		userAgent = MOZILLA;
+	}
+	
 	/**
 	 * GET a URI given by string and parse the result as JSON.
 	 * 
@@ -103,14 +102,12 @@ public class Resty {
 	}
 
 	/**
-	 * GET a URI and parse the result as JSON. JSONObject, part of the json.org
-	 * libraries is used to represent the JSON.
+	 * GET a URI and parse the result as JSON. 
 	 * 
 	 * @param anUri
 	 *          the URI to request
 	 * @return the JSONObject, wrapped in a neat JSONResource
 	 * @throws IOException
-	 * @throws MalformedURLException
 	 */
 	public JSONResource json(URI anUri) throws IOException {
 		return doGET(anUri, new JSONResource());
@@ -137,16 +134,103 @@ public class Resty {
 		return json(URI.create(anUri), content);
 	}
 
-	public PlainTextResource text(URI anUri) throws IOException {
-		return doGET(anUri, new PlainTextResource());
+	/** Get a plain text resource for the specified URI.
+	 * 
+	 * @param anUri the URI to follow
+	 * @return a plain text resource, if available
+	 * @throws IOException if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
+	 */
+	public TextResource text(URI anUri) throws IOException {
+		return doGET(anUri, new TextResource());
 	}
 
+	/** Get a plain text resource for the specified URI by POSTing to it.
+	 * 
+	 * @param anUri the URI to follow
+	 * @return a plain text resource, if available
+	 * @throws IOException if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
+	 */
+	public TextResource text(URI anUri, Content content) throws IOException {
+		return doPOST(anUri, content, new TextResource());
+	}
+	
+	/** Get a plain text resource for the specified URI.
+	 * 
+	 * @param anUri the URI to follow
+	 * @return a plain text resource, if available
+	 * @throws IOException if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
+	 */
+	public TextResource text(String anUri) throws IOException {
+		return text(URI.create(anUri));
+	}
+
+	/** Get a plain text resource for the specified URI by POSTing to it.
+	 * 
+	 * @param anUri the URI to follow
+	 * @return a plain text resource, if available
+	 * @throws IOException if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
+	 */
+	public TextResource text(String anUri, Content content) throws IOException {
+		return text(URI.create(anUri), content);
+	}
+	
+	/**
+	 * GET a URI given by string and parse the result as XML.
+	 * 
+	 * @param string
+	 *          - the string to use as URI
+	 * @see Resty#xml(URI) for more docs
+	 */
+	public XMLResource xml(String string) throws IOException {
+		return xml(URI.create(string));
+	}
+
+	/**
+	 * GET a URI and parse the result as XML.
+	 * 
+	 * @param anUri
+	 *          the URI to request
+	 * @return the XML, wrapped in a neat XMLResource
+	 * @throws IOException
+	 */
+	public XMLResource xml(URI anUri) throws IOException {
+		return doGET(anUri, new XMLResource());
+	}
+
+	/**
+	 * POST to a URI and parse the result as XML
+	 * 
+	 * @param anUri
+	 *          the URI to visit
+	 * @param requestContent
+	 *          the content to POST to the URI
+	 * @return
+	 * @throws IOException
+	 *           if uri is wrong or no connection could be made or for 10 zillion
+	 *           other reasons
+	 */
+	public XMLResource xml(URI anUri, Content requestContent) throws IOException {
+		return doPOST(anUri, requestContent, new XMLResource());
+	}
+
+	/** @see Resty#xml(URI, Content) */
+	public XMLResource xml(String anUri, Content content) throws IOException {
+		return xml(URI.create(anUri), content);
+	}
+	
 	protected <T extends AbstractResource> T doGET(URI anUri, T resource) throws IOException {
 		URLConnection con = anUri.toURL().openConnection();
+		addStandardHeaders(con, resource);
+	
 		return fillResourceFromURL(con, resource);
 	}
 
-	private <T extends AbstractResource> T doPOST(URI anUri, Content requestContent, T resource)
+	protected <T extends AbstractResource> void addStandardHeaders(URLConnection con, T resource) {
+		con.setRequestProperty("User-Agent", userAgent);
+		con.setRequestProperty("Accept", resource.getAcceptedTypes());
+	}
+
+	protected <T extends AbstractResource> T doPOST(URI anUri, Content requestContent, T resource)
 			throws IOException {
 		URLConnection con = anUri.toURL().openConnection();
 		requestContent.addContent(con);
@@ -166,22 +250,36 @@ public class Resty {
 	 * @return the new resource
 	 * @throws IOException
 	 */
-	private <T extends AbstractResource> T fillResourceFromURL(URLConnection con, T resource)
+	protected <T extends AbstractResource> T fillResourceFromURL(URLConnection con, T resource)
 			throws IOException {
-		Object content = con.getContent();
-		resource.setContent(content);
-		resource.setURLConnection(con);
+		resource.fill(con);
 		return resource;
 	}
 
+	/** Create a JSONPathQuery to extract data from a JSON object. This is usually used to extract a URI
+	 * and use it in json|text|xml(JSONPathQuery...) methods of JSONResource.
+	 * <code>
+	 * Resty r = new Resty();
+	 * r.json(someUrl).json(path("path.to.url.in.json"));
+	 * </code>
+	 * @param string
+	 * @return
+	 */
 	public static JSONPathQuery path(String string) {
 		return new JSONPathQuery(string);
 	}
 
-	public static Pattern match(String pattern) {
-		return Pattern.compile(pattern);
+	/** Create an XPathQuery to extract data from an XML document. This is usually used to extract a URI and use it
+	 * in json|text|xml(XPathQuery...) methods.
+	 * In this case, your XPath must result in a String value, i.e. it can't just extract an Element.
+	 * @param anXPathExpression
+	 * @return the query
+	 * @throws XPathException
+	 */
+	public static XPathQuery xpath(String anXPathExpression) throws XPathException {
+		return new XPathQuery(anXPathExpression);
 	}
-
+	
 	public static Content content(JSONObject someJson) {
 		Content c = null;
 		try {
@@ -198,6 +296,11 @@ public class Resty {
 		} catch (UnsupportedEncodingException e) { /* UTF-8 is never unsupported */
 		}
 		return c;
+	}
+	
+	public static FormContent form(String query) {
+		FormContent fc = new FormContent(query);
+		return fc;
 	}
 
 }

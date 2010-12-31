@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="2.749" errors="0" skipped="0" tests="4" name="de.monoid.web.RestyTest">
+<testsuite failures="0" time="4.69" errors="0" skipped="0" tests="3" name="de.monoid.web.RestyXmlTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
@@ -37,13 +37,12 @@
     <property name="os.version" value="10.6.5"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="user.home" value="/Users/beders"/>
-    <property name="user.timezone" value="America/Los_Angeles"/>
+    <property name="user.timezone" value=""/>
     <property name="java.awt.printerjob" value="apple.awt.CPrinterJob"/>
     <property name="java.specification.version" value="1.6"/>
     <property name="file.encoding" value="MacRoman"/>
     <property name="user.name" value="beders"/>
     <property name="java.class.path" value="/Users/beders/workspace/resty/target/test-classes:/Users/beders/workspace/resty/target/classes:/Users/beders/.m2/repository/net/java/dev/javacc/javacc/4.1/javacc-4.1.jar:/Users/beders/.m2/repository/org/json/json/20090211/json-20090211.jar:/Users/beders/.m2/repository/junit/junit/4.8.2/junit-4.8.2.jar:"/>
-    <property name="content.types.user.table" value="src/test/java/de/monoid/web/mimecap.properties"/>
     <property name="java.vm.specification.version" value="1.0"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"/>
@@ -65,8 +64,7 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.001" classname="de.monoid.web.RestyTest" name="sampleUse"/>
-  <testcase time="0.801" classname="de.monoid.web.RestyTest" name="geoNames"/>
-  <testcase time="0.172" classname="de.monoid.web.RestyTest" name="formDataGet"/>
-  <testcase time="1.771" classname="de.monoid.web.RestyTest" name="formDataPost"/>
+  <testcase time="1.646" classname="de.monoid.web.RestyXmlTest" name="testXml"/>
+  <testcase time="1.126" classname="de.monoid.web.RestyXmlTest" name="testXml2Text"/>
+  <testcase time="1.856" classname="de.monoid.web.RestyXmlTest" name="jsonToXml"/>
 </testsuite>

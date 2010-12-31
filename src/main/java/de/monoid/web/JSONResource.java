@@ -1,23 +1,31 @@
 package de.monoid.web;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class JSONResource extends AbstractResource {
 	JSONObject json;
 	
-	@Override
-	void setContent(Object aContent) {
-		json = (JSONObject)aContent;
-	}
-	
-	public JSONObject object() {
+	public JSONObject object() throws IOException, JSONException {
+		if (json == null) {
+			json = transformStream();
+		}
 		return json;
 	}
 	
-	/** Execute the given path query on the json and use the returned string as an URI
+	/** Transforming the JSON on the fly */
+	protected JSONObject transformStream() throws IOException, JSONException {
+		JSONObject json = new JSONObject(new JSONTokener(new InputStreamReader(inputStream, "UTF-8")));
+		return json;
+	}
+
+	/** Execute the given path query on the json GET the returned URI expecting JSON
 	 * 
 	 * @param path path to the URI to follow
 	 * @return a new resource, as a result of getting it from the server in JSON format
@@ -28,26 +36,61 @@ public class JSONResource extends AbstractResource {
 		Object jsonValue = path.eval(this);
 		return json(jsonValue.toString());
 	}
+	
+	/** Execute the given path query on the json and POST to the returned URI expecting JSON
+	 * 
+	 * @param path path to the URI to follow
+	 * @return a new resource, as a result of getting it from the server in JSON format
+	 * @throws Exception 
+	 * @throws JSONException 
+	 */
+	public JSONResource json(JSONPathQuery path, Content content) throws Exception {
+		Object jsonValue = path.eval(this);
+		return json(jsonValue.toString(), content);
+	}
 
-	/** Execute the given path query on the json and use the returned string as an URI
+	/** Execute the given path query on the json and use the returned string as an URI expecting text/*
 	 * 
 	 * @param path path to the URI to follow
 	 * @return a new resource, as a result of getting it from the server in text/plain format
 	 * @throws Exception 
 	 * @throws JSONException 
 	 */
-	public PlainTextResource text(JSONPathQuery path) throws Exception {
+	public TextResource text(JSONPathQuery path) throws Exception {
 		Object jsonValue = path.eval(this);
 		return text(URI.create(jsonValue.toString()));
 	}
 
+	/** Execute the given path query on the json and GET the returned URI expecting text/*
+	 * 
+	 * @param path path to the URI to follow
+	 * @return a new resource, as a result of getting it from the server in JSON format
+	 * @throws Exception 
+	 */
+	public XMLResource xml(JSONPathQuery path) throws Exception {
+		Object jsonValue = path.eval(this);
+		return xml(jsonValue.toString());
+	}
+	
+	/** Execute the given path query on the json and POST to the returned URI expecting text/*
+	 * 
+	 * @param path path to the URI to follow
+	 * @return a new resource, as a result of getting it from the server in JSON format
+	 * @throws Exception 
+	 */
+	public XMLResource xml(JSONPathQuery path, Content content) throws Exception {
+		Object jsonValue = path.eval(this);
+		return xml(jsonValue.toString(), content);
+	}
 	
 	/** Gets the partial JSON object or attribute as specified in the path expression.*/
 	public Object get(String path) throws Exception {
 		return new JSONPathQuery(path).eval(this);
 	}
 
+	@Override
+	String getAcceptedTypes() {
+		return "application/json";
+	}
 
-
-	
 }
