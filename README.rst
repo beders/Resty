@@ -18,6 +18,8 @@ Here is an example on how to use the geonames web service. It retrieves the JSON
  	Resty r = new Resty();
 	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").get("postalcodes[0].placeName");
  
+See more examples below.
+ 
 Features
 --------
 - GET, POST for text, XML and JSON
@@ -31,6 +33,7 @@ Status
 -------
 
 Infancy
+
 - No support for multipart/form-data yet 
 - No support for the other HTTP verbs yet
 - No explicit HTML support yet. Use text(...).toString() and feed it a parser like Jericho
@@ -43,14 +46,14 @@ You need the org.json classes for JSON support.
 
 
 Compile it yourself
--------
+-------------------
 Use Maven 2 or 3 to build.
 
 
 Examples
 -----------
 
-Getting location information from the geonames web service, published as JSON::
+*Getting location information from the geonames web service, published as JSON*::
 
 	Resty r = new Resty();
 	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").
@@ -58,8 +61,8 @@ Getting location information from the geonames web service, published as JSON::
 
 This gets a JSON object from the specified URL and extracts the first place name.
 
-Getting the Google Developer calendar feed as JSON and following the first entry, which is an XML resource,
-extracting the title tag:
+*Getting the Google Developer calendar feed as JSON and following the first entry, which is an XML resource,
+extracting the title tag*::
 
 	Resty r = new Resty();
 	String title = r.json("http://www.google.com/calendar/feeds/developer-calendar@google.com/public/full?alt=json").
@@ -67,7 +70,7 @@ extracting the title tag:
 
 The path(...) expression is used to extract a URL from the returned JSON object, which is then used to read an XML document.
 
-Getting ATOM feed from Slashdot and printing article URLs::
+*Getting ATOM feed from Slashdot and printing article URLs*::
 
 	Resty r = new Resty();
 	NodeList nl = r.xml("http://rss.slashdot.org/Slashdot/slashdotGamesatom").get("feed/entry/link");
@@ -75,12 +78,12 @@ Getting ATOM feed from Slashdot and printing article URLs::
 		System.out.println(((Element)nl.item(i)).getAttribute("href"));
 	}
 
-Some supported JSON path constructs::
+*Some supported JSON path constructs*::
 
- store.book[price>9 && price<12.999].author
+ store.book[price>7 && price<12.999].author
  store.book[!category='reference'].author
  
-JSON Sample::
+JSON Sample for paths above:
 
  { "store": {
     "book": [ 
@@ -90,7 +93,7 @@ JSON Sample::
         "price": 8.95
       }, ... ]}}
  
-Chaining calls to navigate JSON objects. This is useful if the JSON contains URIs to go down the rabbit hole so to say::
+*Chaining calls to navigate JSON objects. This is useful if the JSON contains URIs to go down the rabbit hole so to say*::
 
  JSONObject json = r.
 	json("http://localhost:9999/rest/sc").
@@ -98,4 +101,8 @@ Chaining calls to navigate JSON objects. This is useful if the JSON contains URI
 	json(path("workflows")).json(path("current")).json(path("levels[displayName='Incoming'].href")).
 	json(path("ruleSets[1].EngageRouting")).object();
 
+Developers
+===========
+
+- Jochen Bedersdorfer (resty@bedersdorfer.de)
  
