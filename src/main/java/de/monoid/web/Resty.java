@@ -7,11 +7,12 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import javax.xml.xpath.XPathException;
 
-import org.json.JSONObject;
 
+import de.monoid.json.JSONObject;
 import de.monoid.web.auth.RestyAuthenticator;
 
 /**
@@ -218,6 +219,46 @@ public class Resty {
 		return xml(URI.create(anUri), content);
 	}
 	
+	/** Get the resource specified by the uri and return a binary resource for it.
+	 * 
+	 * @param anUri the uri to follow
+	 * @return
+	 * @throws IOException 
+	 */
+	public BinaryResource bytes(String anUri) throws IOException {
+		return bytes(URI.create(anUri));
+	}
+	
+	/** Get the resource specified by the uri and return a binary resource for it.
+	 * 
+	 * @param uri the uri to follow
+	 * @return
+	 * @throws IOException 
+	 */
+	public BinaryResource bytes(URI anUri) throws IOException {
+		return doGET(anUri, new BinaryResource());
+	}
+	
+	/** POST to the URI and get the resource as binary resource.
+	 * 
+	 * @param anUri the uri to follow
+	 * @return
+	 * @throws IOException 
+	 */
+	public BinaryResource bytes(String anUri, Content someContent) throws IOException {
+		return bytes(URI.create(anUri), someContent);
+	}
+	
+	/** POST to the URI and get the resource as binary resource.
+	 * 
+	 * @param uri the uri to follow
+	 * @return
+	 * @throws IOException 
+	 */
+	public BinaryResource bytes(URI anUri, Content someContent) throws IOException {
+		return doPOST(anUri, someContent, new BinaryResource());
+	}
+
 	protected <T extends AbstractResource> T doGET(URI anUri, T resource) throws IOException {
 		URLConnection con = anUri.toURL().openConnection();
 		addStandardHeaders(con, resource);
@@ -298,9 +339,21 @@ public class Resty {
 		return c;
 	}
 	
+	/** Create form content as application/x-www-form-urlencoded (i.e. a=b&c=d&...)
+	 * 
+	 * @param query the preformatted, properly encoded form data
+	 * @return a content object to be useable for upload
+	 */
 	public static FormContent form(String query) {
 		FormContent fc = new FormContent(query);
 		return fc;
+	}
+	
+	public static String enc(String unencodedString) {
+		try {
+			return URLEncoder.encode(unencodedString, "UTF-8");
+		} catch (UnsupportedEncodingException e) {} // UTF-8 is never unsupported
+		return null;
 	}
 
 }

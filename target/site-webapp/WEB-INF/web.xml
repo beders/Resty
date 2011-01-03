@@ -24,7 +24,7 @@ under the License.
 <web-app>
   <filter>
     <filter-name>doxia</filter-name>
-    <filter-class>org.apache.maven.plugins.site.webapp.DoxiaFilter</filter-class>
+    <filter-class>de.monoid.apache.maven.plugins.site.webapp.DoxiaFilter</filter-class>
   </filter>
 
   <filter-mapping>

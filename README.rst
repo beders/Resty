@@ -41,8 +41,7 @@ Infancy
 
 Installation
 -------------
-Either create the JAR yourself or grab the rest-*.jar file and add it to your CLASSPATH.
-You need the org.json classes for JSON support.
+Either create the JAR yourself (see target directory or grab the rest-*.jar file and add it to your CLASSPATH.
 
 
 Compile it yourself
@@ -95,6 +94,9 @@ JSON Sample for paths above:
  
 *Chaining calls to navigate JSON objects. This is useful if the JSON contains URIs to go down the rabbit hole so to say*::
 
+ import static de.monoid.web.Resty.*;
+ import de.monoid.web.Resty;
+
  JSONObject json = r.
 	json("http://localhost:9999/rest/sc").
 	json(path("serviceclients[displayName='Sample'].href")).
@@ -105,4 +107,6 @@ Developers
 ===========
 
 - Jochen Bedersdorfer (resty@bedersdorfer.de)
+
+
  

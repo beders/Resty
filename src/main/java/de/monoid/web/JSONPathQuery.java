@@ -3,9 +3,9 @@ package de.monoid.web;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import de.monoid.json.JSONException;
+import de.monoid.json.JSONObject;
 import de.monoid.web.jp.javacc.JSONPathCompiler;
 import de.monoid.web.jp.javacc.ParseException;
 

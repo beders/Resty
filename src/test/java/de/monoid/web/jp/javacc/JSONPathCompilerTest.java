@@ -4,18 +4,17 @@
 package de.monoid.web.jp.javacc;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.junit.Test;
 
+import de.monoid.json.JSONException;
+import de.monoid.json.JSONObject;
+import de.monoid.json.JSONTokener;
 import de.monoid.web.jp.javacc.JSONPathCompiler.JSONPathExpr;
 
 /**

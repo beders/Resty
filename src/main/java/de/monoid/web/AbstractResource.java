@@ -34,6 +34,10 @@ public abstract class AbstractResource extends Resty {
 	public HttpURLConnection http() {
 		return (HttpURLConnection)urlConnection;
 	}
+
+	public InputStream stream() {
+		return inputStream;
+	}
 	
 	/**
 	 * Check if the URLConnection has returned the specified responseCode

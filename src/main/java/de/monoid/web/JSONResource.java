@@ -2,25 +2,24 @@ package de.monoid.web;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import de.monoid.json.JSONException;
+import de.monoid.json.JSONObject;
+import de.monoid.json.JSONTokener;
 
 public class JSONResource extends AbstractResource {
 	JSONObject json;
 	
 	public JSONObject object() throws IOException, JSONException {
 		if (json == null) {
-			json = transformStream();
+			json = unmarshal();
 		}
 		return json;
 	}
 	
 	/** Transforming the JSON on the fly */
-	protected JSONObject transformStream() throws IOException, JSONException {
+	protected JSONObject unmarshal() throws IOException, JSONException {
 		JSONObject json = new JSONObject(new JSONTokener(new InputStreamReader(inputStream, "UTF-8")));
 		return json;
 	}

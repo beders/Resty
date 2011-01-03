@@ -1,7 +1,7 @@
 package de.monoid.web.jp.javacc;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import de.monoid.json.JSONException;
+import de.monoid.json.JSONObject;
 
 public abstract class AbstractJSONExpr extends SimpleNode implements JSONPathCompilerTreeConstants {
 
