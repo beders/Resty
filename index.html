@@ -18,8 +18,17 @@
       margin: 0 auto;
       width: 700px;
     }
-    h1 { font-size: 3.8em; color: #2f350d; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
+    h1 { font-size: 3.8em; color: #2f350d; margin-bottom: 3px; position:relative;}
+    h1 span { 	
+        position:absolute;
+	display:block;
+	background:url(gradient_1.png) repeat-x;
+	top:0;
+	left:0;
+	height:100%;
+	width:100%;
+    }
+
     h1 a { text-decoration: none }
     h2 { font-size: 1.5em; color: #2f350d; }
     h3 { text-align: center; color: #2f350d; }
@@ -46,7 +55,7 @@
     </div>
 
     <h1><a href="http://github.com/beders/Resty">Resty</a>
-      <span class="small">by <a href="http://github.com/beders">beders</a></span></h1>
+      <span></span></h1>
 
     <div class="description">
       Tiny HTTP/REST client for Java.
