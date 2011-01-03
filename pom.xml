@@ -33,6 +33,16 @@
           </execution>
         </executions>
   		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-javadoc-plugin</artifactId>
+  			<version>2.7</version>
+  			<configuration>
+  				<excludePackageNames>de.monoid.web.*</excludePackageNames>
+  				<show>public</show>
+  				<charset>utf-8</charset>
+  			</configuration>
+  		</plugin>
   	</plugins>
   </build>
   <repositories>
@@ -61,11 +71,6 @@
   </dependencies>
   <reporting>
   	<plugins>
-  		<plugin>
-  			<groupId>de.monoid.apache.maven.plugin</groupId>
-  			<artifactId>maven-javadoc-plugin</artifactId>
-  			<version>2.7</version>
-  		</plugin>
   	</plugins>
   </reporting>
 </project>

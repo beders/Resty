@@ -1,9 +1,9 @@
 package de.monoid.web;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /** Encapsulates form-data sent to web services.
+ * Currently only application/x-www-form-urlencoded is supported.
  * 
  * @author beders
  *

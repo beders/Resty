@@ -9,6 +9,8 @@ import java.net.URLConnection;
 
 /**
  * Class to encapsulate content being sent as payload of a POST request.
+ * You can use Resty.content(...) to create content objects. 
+ * 
  * 
  * @author beders
  *

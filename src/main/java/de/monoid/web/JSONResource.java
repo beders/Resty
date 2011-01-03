@@ -8,9 +8,21 @@ import de.monoid.json.JSONException;
 import de.monoid.json.JSONObject;
 import de.monoid.json.JSONTokener;
 
+/** A resource presentation in JSON format.
+ * You can  ask Resty to parse the JSON into a JSONObject, which is similar to the org.json.JSONObject and allows full access to the JSON.
+ * You can also access the JSON with a JSONPathQuery to extract only the parts you are interested in.
+ * @author beders
+ *
+ */
 public class JSONResource extends AbstractResource {
 	JSONObject json;
 	
+	/** 
+	 * Parse and return JSON object. Parsing is done only once after which the inputStrem is at EOF.
+	 * @return the JSON object
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public JSONObject object() throws IOException, JSONException {
 		if (json == null) {
 			json = unmarshal();
@@ -85,6 +97,11 @@ public class JSONResource extends AbstractResource {
 	/** Gets the partial JSON object or attribute as specified in the path expression.*/
 	public Object get(String path) throws Exception {
 		return new JSONPathQuery(path).eval(this);
+	}
+	
+	/** Gets the partial JSON object or attribute as specified in the path expression.*/
+	public Object get(JSONPathQuery aQuery) throws Exception {
+		return aQuery.eval(this);
 	}
 
 	@Override

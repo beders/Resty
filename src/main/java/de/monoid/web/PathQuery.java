@@ -1,6 +1,8 @@
 package de.monoid.web;
 
-/** Abstraction for queries into complex datastructures.
+/** 
+ * Simple abstraction for queries into complex datastructures.
+ * Not really needed, but I like playing around with generics. :)
  * 
  * @author beders
  *

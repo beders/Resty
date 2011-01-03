@@ -10,9 +10,9 @@ import java.net.URLConnection;
 
 /**
  * Abstract base class for all resource handlers you want to use with Resty.
- * Resource handlers aka content handlers hold the content returned from a
- * URLConnection
  * 
+ * It gives access to the underlying URLConnection and the current inputStream
+ *
  * @author beders
  * 
  */

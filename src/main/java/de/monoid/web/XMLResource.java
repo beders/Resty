@@ -13,9 +13,24 @@ import org.xml.sax.SAXException;
 
 import de.monoid.json.JSONException;
 
+
+/** Resource presentation for an XML document. 
+ * You can access the XML as a DOM document. I know, DOM sucks, but you are free to change this class to support
+ * your favorite XML parser.
+ * 
+ * What is not so sucky is access to the XML via XPath with the convenient get(...) methods.
+ * 
+ * @author beders
+ *
+ */
 public class XMLResource extends TextResource {
 	protected Document document;
 
+	/** Return the DOM of the XML resource.
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public Document doc() throws IOException {
 		// if the stream has alread been read, use the text format
 		InputSource is;

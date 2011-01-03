@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="3.429" errors="0" skipped="0" tests="3" name="de.monoid.web.RestyXmlTest">
+<testsuite failures="0" time="4.786" errors="0" skipped="0" tests="3" name="de.monoid.web.RestyXmlTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
@@ -22,7 +22,7 @@
     <property name="basedir" value="/Users/beders/workspace/resty"/>
     <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="surefire.real.class.path" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/surefirebooter1530776536484115697.jar"/>
+    <property name="surefire.real.class.path" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/surefirebooter7163145001896874889.jar"/>
     <property name="java.io.tmpdir" value="/var/folders/IW/IW3AbNtWGWuWdxqeUuYnh++++TI/-Tmp-/"/>
     <property name="line.separator" value="
 "/>
@@ -64,7 +64,7 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="1.202" classname="de.monoid.web.RestyXmlTest" name="testXml"/>
-  <testcase time="0.531" classname="de.monoid.web.RestyXmlTest" name="testXml2Text"/>
-  <testcase time="1.68" classname="de.monoid.web.RestyXmlTest" name="jsonToXml"/>
+  <testcase time="1.385" classname="de.monoid.web.RestyXmlTest" name="testXml"/>
+  <testcase time="1.644" classname="de.monoid.web.RestyXmlTest" name="testXml2Text"/>
+  <testcase time="1.743" classname="de.monoid.web.RestyXmlTest" name="jsonToXml"/>
 </testsuite>

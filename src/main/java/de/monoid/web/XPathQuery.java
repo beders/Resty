@@ -10,6 +10,13 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/** PathQuery for XPath.
+ * Use this to access XMLResource objects.
+ * Many times you might want to use Resty.xpath(...) to create instances of this class.
+ * 
+ * @author beders
+ *
+ */
 public class XPathQuery extends PathQuery<XMLResource,NodeList> {
 	protected XPathExpression xPathExpression;
 
@@ -42,7 +49,15 @@ public class XPathQuery extends PathQuery<XMLResource,NodeList> {
 		return retVal;
 	}
 	
-	<T> T eval(XMLResource resource, Class<T>aReturnType) throws Exception {
+	/** Evaluate the XPath on an XMLResource and convert the result into aReturnType.
+	 * 
+	 * @param <T> the expected type of the result
+	 * @param resource
+	 * @param aReturnType 
+	 * @return
+	 * @throws Exception
+	 */
+	public <T> T eval(XMLResource resource, Class<T>aReturnType) throws Exception {
 		T retVal = (T) xPathExpression.evaluate(resource.doc(), getConstant(aReturnType));
 		return retVal;
 	}

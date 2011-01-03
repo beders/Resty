@@ -19,6 +19,9 @@ public class TextResource extends AbstractResource {
 	static final Pattern charsetPattern = Pattern.compile("charset=([^ ;]+);?");
 	protected String text;
 
+	/** Kinda obvious, but, yes, it parses the inputStream with the proper charset and returns the content as String
+	 * 
+	 */
 	@Override
 	public String toString() {
 		if (text == null && inputStream != null) {

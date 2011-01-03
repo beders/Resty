@@ -16,29 +16,32 @@ import de.monoid.json.JSONObject;
 import de.monoid.web.auth.RestyAuthenticator;
 
 /**
- * Resty is a small, convenient interface to talk to RESTful services. Its focus
- * is on simplicity and ease-of-use, often requiring only two lines of code to
- * access any web service. It supports chaining several requests which is very
- * useful in RESTful application employing HATEOS.
+ * Main class. Use me! Use me!
+ * Resty is a small, convenient interface to talk to RESTful services. 
  * 
  * Basic usage is very simple: Create a Resty instance, use authenticate methode
  * to add credentials, then call one of the content type specific methods. The
  * idea is that the method name will convey the expected content type you can
  * then operate on.
  * 
+ * A neat trick to save you typing is to use import static de.monoid.web.Resty.*;
+ * 
  * Here is an example on how to use the geonames web service. It retrieves the
  * json object (see json.org for details) and gets the name of a place from the
  * zip code:
- * 
+ * <pre>
  * <code>
 	Resty r = new Resty();
 	Object name = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").get("postalcodes[0].placeName");
 	assertEquals(name, "Rehlingen-Siersburg");
  * </code>
+ * </pre>
  * 
  * Resty supports complex path queries to navigate into a json object. This is
  * mainly used for extracting URIs to surf along a series of REST resources for
  * web services following the HATEOS paradigm.
+ * 
+ * Resty objects are not re-entrant.
  * 
  * @author beders
  *
@@ -58,6 +61,9 @@ public class Resty {
 
 	protected String userAgent = DEFAULT_USER_AGENT;
 
+	/** Create a new instance without any options. 
+	 * Oh, ok, there are no options yet :)
+	 */
 	public Resty() {
 		// no options
 	}
@@ -81,7 +87,13 @@ public class Resty {
 	public void authenticate(URI aSite, String aLogin, char[] aPwd) {
 		rath.addSite(aSite, aLogin, aPwd);
 	}
-
+	
+	/** @see Resty#authenticate(URI, String, char[])
+	 * 
+	 * @param string
+	 * @param aLogin
+	 * @param charArray
+	 */
 	public void authenticate(String string, String aLogin, char[] charArray) {
 		authenticate(URI.create(string), aLogin, charArray);
 	}
@@ -313,7 +325,7 @@ public class Resty {
 	/** Create an XPathQuery to extract data from an XML document. This is usually used to extract a URI and use it
 	 * in json|text|xml(XPathQuery...) methods.
 	 * In this case, your XPath must result in a String value, i.e. it can't just extract an Element.
-	 * @param anXPathExpression
+	 * @param anXPathExpression an XPath expression with result type String
 	 * @return the query
 	 * @throws XPathException
 	 */
@@ -321,6 +333,11 @@ public class Resty {
 		return new XPathQuery(anXPathExpression);
 	}
 	
+	/** Create a content object from JSON. Use this to POST the content to a URL.
+	 * 
+	 * @param someJson the JSON to use
+	 * @return the content to send
+	 */
 	public static Content content(JSONObject someJson) {
 		Content c = null;
 		try {
@@ -330,6 +347,11 @@ public class Resty {
 		return c;
 	}
 
+	/** Create a content object from plain text. Use this to POST the content to a URL.
+	 * 
+	 * @param somePlainText the JSON to use
+	 * @return the content to send
+	 */
 	public static Content content(String somePlainText) {
 		Content c = null;
 		try {
@@ -349,6 +371,11 @@ public class Resty {
 		return fc;
 	}
 	
+	/** Shortcut to URLEncoder.encode with UTF-8.
+	 * 
+	 * @param unencodedString the string to encode
+	 * @return the URL encoded string, safe to be used in URLs
+	 */
 	public static String enc(String unencodedString) {
 		try {
 			return URLEncoder.encode(unencodedString, "UTF-8");
