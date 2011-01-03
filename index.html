@@ -57,7 +57,7 @@
 Its focus is on simplicity and ease-of-use, often requiring only two lines of code to access RESTful web services.
 <p>
 Basic usage is very simple: <br>
-Create a Resty instance, use authenticate methode to add credentials, then call one of the content type specific methods.
+Create a Resty instance, then call one of the content type specific methods to get the contents of an URL.
 <p>
 Here is an example on how to use the geonames web service. It retrieves the JSON object (see json.org for details) and gets the name of a place from the zip code:
 <pre>
@@ -72,6 +72,8 @@ String name = r.json("http://ws.geonames.org/postalCodeLookupJSON?"+
 Resty supports GET, POST (other verbs to come) for JSON, XML, any text or binary data.<br>
 For JSON, a query language similar to JasonPath is provided: <code>r.json(url).get("store.book[price>7 && price<12.999].author");</code><p>
 For XML, XPath is supported, mapping XML fragments to neat little objects like Strings: <code>r.xml(url).get("entry/title/text()", String.class);</code>
+<p>
+Resty supports HTTP Authentication. No need to schlepp around the header for each call, just tell Resty when to use authentication: <code>r.authenticate("http://somewhere/else", "login", "yourpasswd".toCharArray());</code>
 <p>
 Here's another example. Getting a static hybrid map from Google Maps and saving it to disk:
 <pre>
