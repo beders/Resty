@@ -7,7 +7,7 @@
     <tagletArtifact />
   </tagletArtifacts>
   <excludePackageNames>
-    <excludePackageName>de.monoid.web.*</excludePackageName>
+    <excludePackageName>us.monoid.web.*</excludePackageName>
   </excludePackageNames>
   <javadocResourcesDirectory>src/main/javadoc</javadocResourcesDirectory>
 </javadocOptions>

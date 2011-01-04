@@ -82,7 +82,7 @@ The path(...) expression is used to extract a URL from the returned JSON object,
  store.book[price>7 && price<12.999].author
  store.book[!category='reference'].author
  
-JSON Sample for paths above:
+JSON Sample for paths above::
 
  { "store": {
     "book": [ 
@@ -94,8 +94,8 @@ JSON Sample for paths above:
  
 *Chaining calls to navigate JSON objects. This is useful if the JSON contains URIs to go down the rabbit hole so to say*::
 
- import static de.monoid.web.Resty.*;
- import de.monoid.web.Resty;
+ import static us.monoid.web.Resty.*;
+ import us.monoid.web.Resty;
 
  JSONObject json = r.
 	json("http://localhost:9999/rest/sc").

@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.monoid.web</groupId>
+  <groupId>us.monoid.web</groupId>
   <artifactId>resty</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <name>Resty</name>
   <description>Simple Java client to talk to RESTful backends</description>
   <url>http://github.com/beders/resty</url>
@@ -38,7 +38,7 @@
   			<artifactId>maven-javadoc-plugin</artifactId>
   			<version>2.7</version>
   			<configuration>
-  				<excludePackageNames>de.monoid.web.*</excludePackageNames>
+  				<excludePackageNames>us.monoid.web.*</excludePackageNames>
   				<show>public</show>
   				<charset>utf-8</charset>
   			</configuration>
