@@ -22,7 +22,7 @@ See more examples below.
  
 Features
 --------
-- GET, POST for text, XML and JSON
+- GET, POST, PUT, DELETE for text, XML, JSON, binary
 - Fluid-style API to follow hyperlinks easily
 - Complex path queries for JSON (simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!))
 - Support for XPath expressions
