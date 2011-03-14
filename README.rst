@@ -32,10 +32,10 @@ Features
 Status
 -------
 
-Infancy
+Growing
 
-- No support for multipart/form-data yet 
-- No support for the other HTTP verbs yet
+- Some support for multipart/form-data yet. No nice support of multipart/mixed as sub-parts.
+- Some HTTP verbs still missing (HEAD, OPTIONS among them)
 - No explicit HTML support yet. Use text(...).toString() and feed it a parser like Jericho
 - No oauth support yet.
 
