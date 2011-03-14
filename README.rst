@@ -42,7 +42,10 @@ Infancy
 Installation
 -------------
 Either create the JAR yourself (see target directory or grab the rest-*.jar file and add it to your CLASSPATH.
-
+Or grab it from Maven central::
+ groupId: us.monoid.web
+ artifactId: resty
+ version: 0.1.1
 
 Compile it yourself
 -------------------
