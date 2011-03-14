@@ -15,10 +15,9 @@ import java.net.URLConnection;
  * @author beders
  *
  */
-public class Content {
+public class Content extends AbstractContent {
 	protected String mime;
-	protected byte[] content;
-	
+	protected byte[] content;	
 
 	/** Create a new content object with given mime type and the content as bytes.
 	 * No check if mime type is 'valid' or similar non-sense is done. You are all grown-ups.
@@ -34,14 +33,28 @@ public class Content {
 	 * 
 	 * @param con the connection to use
 	 * @throws IOException if writing to stream fails
+	 * 
 	 */
-	void addContent(URLConnection con) throws IOException {
+	@Override
+	protected void addContent(URLConnection con) throws IOException {
 		con.setDoOutput(true);
 		con.addRequestProperty("Content-Type", mime);
-		con.addRequestProperty("Content-Lenghth", String.valueOf(content.length));
+		con.addRequestProperty("Content-Length", String.valueOf(content.length));
 		OutputStream os = con.getOutputStream();
-		os.write(content);
+		writeContent(os);
 		os.close();
 	}
 
+	@Override
+	public void writeContent(OutputStream os) throws IOException {
+		os.write(content);
+	}
+
+	/** Used as a mime part, writing content headers */
+	@Override
+	public void writeHeader(OutputStream os) throws IOException {
+		os.write(ascii("Content-Type: " + mime + "\r\n"));
+		os.write(ascii("Content-Length: " + String.valueOf(content.length) + "\r\n"));
+	}
+	
 }

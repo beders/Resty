@@ -20,7 +20,7 @@ public class BinaryResource extends AbstractResource {
 	 */
 	@Override
 	String getAcceptedTypes() {
-		return "application/octet-stream;*/*";
+		return "application/octet-stream,*/*";
 	}
 
 	/** Save the contents of the resource to a file.
