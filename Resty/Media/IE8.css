@@ -1,0 +1,13 @@
+.inline-block {
+    display: inline-block;
+    vertical-align: baseline;
+}
+li.full-width {
+    width: auto;
+}
+li div div.inline-block a img {
+    text-indent: 0;
+}   
+img {
+    -ms-interpolation-mode: bicubic;
+}   

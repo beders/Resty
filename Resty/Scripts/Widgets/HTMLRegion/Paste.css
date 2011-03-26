@@ -1,0 +1,53 @@
+/*  The main widget <div> element.
+*/
+
+div.com-apple-iweb-widget-HTMLRegion {
+}
+
+/*  Root <div> for all widget views.
+*/
+
+div.com-apple-iweb-widget-HTMLRegion .html_region_widget {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/*  HTML Snippet View.
+*/
+
+div.com-apple-iweb-widget-HTMLRegion div.HTMLRegionSnippetView {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+/*  The Status View.
+*/
+
+div.com-apple-iweb-widget-HTMLRegion .HTMLRegionStatusView {
+    background: rgb(206,206,206);
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/*  Status View table.
+*/
+
+div.com-apple-iweb-widget-HTMLRegion .StatusMessageTable {
+    position: absolute;
+    border-collapse: collapse;
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
+
+div.com-apple-iweb-widget-HTMLRegion .StatusMessageTable td {
+    vertical-align: middle;
+    text-align: center;
+}
+
