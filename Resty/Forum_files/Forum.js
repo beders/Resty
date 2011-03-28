@@ -3,7 +3,7 @@
 setTransparentGifURL('Media/transparent.gif');function hostedOnDM()
 {return false;}
 function onPageLoad()
-{loadMozillaCSS('API_Docs_files/API_DocsMoz.css')
+{loadMozillaCSS('Forum_files/ForumMoz.css')
 adjustLineHeightIfTooBig('id1');adjustFontSizeIfTooBig('id1');adjustLineHeightIfTooBig('id2');adjustFontSizeIfTooBig('id2');detectBrowser();Widget.onload();performPostEffectsFixups()}
 function onPageUnload()
 {Widget.onunload();}
