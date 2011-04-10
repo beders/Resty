@@ -19,7 +19,9 @@ public class TextResource extends AbstractResource {
 	static final Pattern charsetPattern = Pattern.compile("charset=([^ ;]+);?");
 	protected String text;
 
-	/** Kinda obvious, but, yes, it parses the inputStream with the proper charset and returns the content as String
+	/**
+	 * Kinda obvious, but, yes, it parses the inputStream with the proper charset
+	 * and returns the content as String
 	 * 
 	 */
 	@Override
@@ -46,28 +48,33 @@ public class TextResource extends AbstractResource {
 		String streamedText = ""; // be robust
 		try {
 			streamedText = bos.toString(charset.name());
-		} catch (UnsupportedEncodingException e) {} // we already checked for that above
+		} catch (UnsupportedEncodingException e) {
+		} // we already checked for that above
 		// check Content-Type text/plain; charset=iso-8859-1
 		return streamedText;
 	}
 
-	/** Get charset for this content type. Parses charset= attribute of content type or falls back to a default
+	/**
+	 * Get charset for this content type. Parses charset= attribute of content
+	 * type or falls back to a default
 	 * 
 	 * @return the charset to use when parsing this content
 	 */
 	protected Charset getCharSet() {
 		String contentType = urlConnection.getContentType();
-		// find out about the charset from the URLConnection
-		Matcher m = charsetPattern.matcher(contentType);
 		Charset charset = Charset.forName("iso-8859-1"); // default charset
-		if (m.find()) {
-			String charsetString = m.group(1);
-			try {
-				charset = Charset.forName(charsetString);
-			} catch (IllegalCharsetNameException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+		if (contentType != null) {
+			// find out about the charset from the URLConnection
+			Matcher m = charsetPattern.matcher(contentType);
+			if (m.find()) {
+				String charsetString = m.group(1);
+				try {
+					charset = Charset.forName(charsetString);
+				} catch (IllegalCharsetNameException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return charset;
