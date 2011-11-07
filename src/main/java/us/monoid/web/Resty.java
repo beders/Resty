@@ -79,10 +79,22 @@ public class Resty {
 
 	/**
 	 * Create an instance of Resty with the following list of options.
+	 * Also, options are carried over to resources created by calls to json/text/binary etc.
+	 * Use {@link #setOptions(Option...)} to change options afterwards.
 	 * 
 	 */
 	public Resty(Option... someOptions) {
-		options = someOptions;
+		setOptions(someOptions);
+	}
+	
+	/** Set options if you missed your opportunity in the c'tor or if you want to change the options.
+	 *  
+	 * @param someOptions new set of options
+	 * @return
+	 */
+	public Resty setOptions(Option... someOptions) {
+		options = (someOptions == null) ? new Option[0] : someOptions;
+		return this;
 	}
 
 	/**
