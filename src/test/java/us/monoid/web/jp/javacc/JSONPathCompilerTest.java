@@ -12,6 +12,7 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import us.monoid.json.JSONArray;
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
 import us.monoid.json.JSONTokener;
@@ -40,6 +41,10 @@ public class JSONPathCompilerTest {
 		System.out.println(result);
 		assertEquals("Nigel Rees", result);
 		
+		evaluator = parse("store.book");
+		result = evaluator.eval(json);
+		System.out.println(result);
+		assertTrue(result instanceof JSONArray);
 		evaluator = parse("store.book[category='fiction'].author");
 		result = evaluator.eval(json);
     System.out.println(result);
@@ -89,6 +94,15 @@ public class JSONPathCompilerTest {
 			e.printStackTrace();
 		};
 		return null;
+	}
+	
+	@Test
+	public void testArray() throws ParseException, JSONException {
+		System.out.println(this.getClass().getResource("array-test.json"));
+		JSONObject json = read(this.getClass().getResource("array-test.json"));
+		JSONPathExpr evaluator = parse("backdrops[image.width=1280]");
+		Object result = evaluator.eval(json);
+		System.out.println(result);
 	}
 	
 }

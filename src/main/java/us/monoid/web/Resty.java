@@ -9,10 +9,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.xpath.XPathException;
 
 import us.monoid.json.JSONObject;
+import us.monoid.web.Resty.Option;
 import us.monoid.web.auth.RestyAuthenticator;
 import us.monoid.web.mime.MultipartContent;
 
@@ -53,6 +56,7 @@ import us.monoid.web.mime.MultipartContent;
  */
 
 public class Resty {
+	
 	protected static String MOZILLA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13";
 	protected static String DEFAULT_USER_AGENT = "Resty/0.1 (Java)";
 	static RestyAuthenticator rath = new RestyAuthenticator();
@@ -66,13 +70,15 @@ public class Resty {
 	}
 
 	protected String userAgent = DEFAULT_USER_AGENT;
-
-	/**
-	 * Create a new instance without any options. Oh, ok, there are no options yet
-	 * :)
+	private Map<String,String> additionalHeaders;
+	private Option[] options;
+	
+	
+	/** Create an instance of Resty with the following list of options.
+	 * 
 	 */
-	public Resty() {
-		// no options
+	public Resty(Option... someOptions) {
+		options = someOptions;
 	}
 
 	/**
@@ -332,7 +338,17 @@ public class Resty {
 			throws IOException, MalformedURLException {
 		URLConnection con = anUri.toURL().openConnection();
 		addStandardHeaders(con, resource);
+		addAdditionalHeaders(con);
+		for (Option o : options) {
+			o.apply(con);
+		}
 		return con;
+	}
+
+	protected void addAdditionalHeaders(URLConnection con) {
+		for (Map.Entry<String, String> header:getAdditionalHeaders().entrySet()) {
+			con.addRequestProperty(header.getKey(), header.getValue());
+		}
 	}
 
 	protected <T extends AbstractResource> void addStandardHeaders(URLConnection con, T resource) {
@@ -356,6 +372,7 @@ public class Resty {
 	protected <T extends AbstractResource> T fillResourceFromURL(URLConnection con, T resource)
 			throws IOException {
 		resource.fill(con);
+		resource.getAdditionalHeaders().putAll(getAdditionalHeaders()); // carry over additional headers TODO don't do it if there are no additional headers
 		return resource;
 	}
 
@@ -506,4 +523,63 @@ public class Resty {
 		return new Deletion();
 	}
 
+	/** Tell Resty to send the specified header with each request done on this instance.
+	 * These headers will also be sent from any resource object returned by this instance.
+	 * I.e. chained calls will carry over the headers r.json(url).json(get("some.path.to.a.url")); 
+	 * Multiple headers of the same type are not supported (yet).
+	 * 
+	 * @param aHeader the header to send
+	 * @param aValue the value
+	 */
+	public void alwaysSend(String aHeader, String aValue) {
+		getAdditionalHeaders().put(aHeader, aValue);
+	}
+	
+	/** Don't send a header that was formely added in the alwaysSend method.
+	 * 
+	 * @param aHeader the header to remove
+	 */
+	public void dontSend(String aHeader) {
+		getAdditionalHeaders().remove(aHeader);
+	}
+
+	protected Map<String,String> getAdditionalHeaders() {
+		if (additionalHeaders == null) {
+			additionalHeaders = new HashMap<String,String>();
+		}
+		return additionalHeaders;
+	}
+	
+	/** Base class for Resty options. You can also create your own options. Override one of the apply methods
+	 * to change an object like URLConnection before it is being used.
+	 * @author beders
+	 *
+	 */
+	abstract public static class Option {
+		public void apply(URLConnection aConnection) {}
+		
+		/** Specify the connection timeout in milliseconds. 
+		 * @see java.net.URLConnection#setConnectTimeout(int)
+		 * @param t the timeout
+		 * @return
+		 */
+		public static Timeout timeout(int t) {
+			return new Timeout(t);
+		}
+
+		public static Option ignoreInvalidCertificates() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+	public static class Timeout extends Option {
+		private int timeout;
+		public Timeout(int t) { timeout = t; }
+
+		@Override
+		public void apply(URLConnection urlConnection) {
+			urlConnection.setConnectTimeout(timeout);
+		}
+		
+	}
 }
