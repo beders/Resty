@@ -31,6 +31,16 @@ public class JSONResource extends AbstractResource {
 		return json;
 	}
 	
+	/** Added for compatibility with Scala. See Issue #2 at github.
+	 * 
+	 * @return the JSONObject presentation
+	 * @throws IOException 
+	 * @throws JSONException if data was no valid JSON
+	 */
+	public JSONObject toObject() throws IOException, JSONException {
+		return object();
+	}
+	
 	/** Transforming the JSON on the fly */
 	protected JSONObject unmarshal() throws IOException, JSONException {
 		JSONObject json = new JSONObject(new JSONTokener(new InputStreamReader(inputStream, "UTF-8")));

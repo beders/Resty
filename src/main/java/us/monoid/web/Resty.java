@@ -9,9 +9,16 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.xpath.XPathException;
 
 import us.monoid.json.JSONObject;
@@ -532,6 +539,31 @@ public class Resty {
 		return additionalHeaders;
 	}
 
+	/** Install a SSL socket factory which will trust all certificates. 
+	 * This is generally considered dangerous as you won't know if you are really talking to the server you think you are talking to.
+	 * This is like your best friend using his Facebook account in an Apple store and forgetting to log out. 
+	 * 
+	 * This method should be called once and replaces the SSL factory for ALL HttpsURLConnections.
+	 */
+	public static void ignoreAllCerts() {
+		TrustManager trm = new X509TrustManager() {
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+			public X509Certificate[] getAcceptedIssuers() {	return null; }
+		};
+
+		SSLContext sc;
+		try {
+			sc = SSLContext.getInstance("SSL");
+			sc.init(null, new TrustManager[] { trm }, null);
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Base class for Resty options. You can also create your own options. Override one of the apply methods to change an object like URLConnection before it is being used.
 	 * 
@@ -554,10 +586,6 @@ public class Resty {
 			return new Timeout(t);
 		}
 
-		public static Option ignoreInvalidCertificates() {
-			// TODO Auto-generated method stub
-			return null;
-		}
 	}
 
 	public static class Timeout extends Option {
