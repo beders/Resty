@@ -15,27 +15,19 @@ import java.util.Map;
 import javax.xml.xpath.XPathException;
 
 import us.monoid.json.JSONObject;
-import us.monoid.web.Resty.Option;
 import us.monoid.web.auth.RestyAuthenticator;
 import us.monoid.web.mime.MultipartContent;
 
 /**
- * Main class. Use me! Use me! Resty is a small, convenient interface to talk to
- * RESTful services.
+ * Main class. Use me! Use me! Resty is a small, convenient interface to talk to RESTful services.
  * 
- * Basic usage is very simple: Create a Resty instance, use authenticate methode
- * to add credentials (optional), then call one of the content type specific
- * methods. The idea is that the method name will convey the expected content
- * type you can then operate on. 
- * Most static methods help you build content objects or queries with a compact syntax.
- * Static methods like put(...) and delete() are used to implement the respective HTTP methods.
+ * Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials (optional), then call one of the content type specific methods. The idea is that the method name
+ * will convey the expected content type you can then operate on. Most static methods help you build content objects or queries with a compact syntax. Static methods like put(...) and delete() are
+ * used to implement the respective HTTP methods.
  * 
- * A neat trick to save you typing is to use import static
- * us.monoid.web.Resty.*;
+ * A neat trick to save you typing is to use import static us.monoid.web.Resty.*;
  * 
- * Here is an example on how to use the geonames web service. It retrieves the
- * json object (see json.org for details) and gets the name of a place from the
- * zip code:
+ * Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code:
  * 
  * <pre>
  * <code>
@@ -45,9 +37,7 @@ import us.monoid.web.mime.MultipartContent;
  * </code>
  * </pre>
  * 
- * Resty supports complex path queries to navigate into a json object. This is
- * mainly used for extracting URIs to surf along a series of REST resources for
- * web services following the HATEOS paradigm.
+ * Resty supports complex path queries to navigate into a json object. This is mainly used for extracting URIs to surf along a series of REST resources for web services following the HATEOS paradigm.
  * 
  * Resty objects are not re-entrant.
  * 
@@ -56,7 +46,7 @@ import us.monoid.web.mime.MultipartContent;
  */
 
 public class Resty {
-	
+
 	protected static String MOZILLA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13";
 	protected static String DEFAULT_USER_AGENT = "Resty/0.1 (Java)";
 	static RestyAuthenticator rath = new RestyAuthenticator();
@@ -65,16 +55,20 @@ public class Resty {
 		// with existing content factories
 		// got rid of it: System.setProperty("java.content.handler.pkgs",
 		// "us.monoid.web.content.handler");
-		CookieHandler.setDefault(new CookieManager());
+		try {
+			CookieHandler.setDefault(new CookieManager());
+		} catch (NoClassDefFoundError oops) {
+			System.err.println("No CookieHandler. Running on GAE? Fine. No cookie support for you!");
+		}
 		Authenticator.setDefault(rath);
 	}
 
 	protected String userAgent = DEFAULT_USER_AGENT;
-	private Map<String,String> additionalHeaders;
+	private Map<String, String> additionalHeaders;
 	private Option[] options;
-	
-	
-	/** Create an instance of Resty with the following list of options.
+
+	/**
+	 * Create an instance of Resty with the following list of options.
 	 * 
 	 */
 	public Resty(Option... someOptions) {
@@ -82,20 +76,16 @@ public class Resty {
 	}
 
 	/**
-	 * Register this root URI for authentication. Whenever a URL is requested that
-	 * starts with this root, the credentials given are used for HTTP AUTH. Note
-	 * that currently authentication information is shared across all Resty
-	 * instances. This is due to the shortcomings of the java.net authentication
-	 * mechanism. This might change should Resty adopt HttpClient and is the
-	 * reason why this method is not a static one.
+	 * Register this root URI for authentication. Whenever a URL is requested that starts with this root, the credentials given are used for HTTP AUTH. Note that currently authentication information is
+	 * shared across all Resty instances. This is due to the shortcomings of the java.net authentication mechanism. This might change should Resty adopt HttpClient and is the reason why this method is
+	 * not a static one.
 	 * 
 	 * @param aSite
 	 *          the root URI of the site
 	 * @param aLogin
 	 *          the login name
 	 * @param aPwd
-	 *          the password. The array will not be internally copied. Whenever
-	 *          you null it, the password is gone within Resty
+	 *          the password. The array will not be internally copied. Whenever you null it, the password is gone within Resty
 	 */
 	public void authenticate(URI aSite, String aLogin, char[] aPwd) {
 		rath.addSite(aSite, aLogin, aPwd);
@@ -113,8 +103,7 @@ public class Resty {
 	}
 
 	/**
-	 * Sets the User-Agent to identify as Mozilla/Firefox. Otherwise a Resty
-	 * specific User-Agent is used
+	 * Sets the User-Agent to identify as Mozilla/Firefox. Otherwise a Resty specific User-Agent is used
 	 */
 	public Resty identifyAsMozilla() {
 		userAgent = MOZILLA;
@@ -162,8 +151,7 @@ public class Resty {
 	 *          the content to POST to the URI
 	 * @return
 	 * @throws IOException
-	 *           if uri is wrong or no connection could be made or for 10 zillion
-	 *           other reasons
+	 *           if uri is wrong or no connection could be made or for 10 zillion other reasons
 	 */
 	public JSONResource json(URI anUri, AbstractContent requestContent) throws IOException {
 		return doPOSTOrPUT(anUri, requestContent, new JSONResource());
@@ -181,8 +169,7 @@ public class Resty {
 	 *          the URI to follow
 	 * @return a plain text resource, if available
 	 * @throws IOException
-	 *           if content type sent is not a plain text, if the connection could
-	 *           not be made and gazillion other reasons
+	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(URI anUri) throws IOException {
 		return doGET(anUri, new TextResource());
@@ -195,8 +182,7 @@ public class Resty {
 	 *          the URI to follow
 	 * @return a plain text resource, if available
 	 * @throws IOException
-	 *           if content type sent is not a plain text, if the connection could
-	 *           not be made and gazillion other reasons
+	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(URI anUri, AbstractContent content) throws IOException {
 		return doPOSTOrPUT(anUri, content, new TextResource());
@@ -209,8 +195,7 @@ public class Resty {
 	 *          the URI to follow
 	 * @return a plain text resource, if available
 	 * @throws IOException
-	 *           if content type sent is not a plain text, if the connection could
-	 *           not be made and gazillion other reasons
+	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(String anUri) throws IOException {
 		return text(URI.create(anUri));
@@ -223,8 +208,7 @@ public class Resty {
 	 *          the URI to follow
 	 * @return a plain text resource, if available
 	 * @throws IOException
-	 *           if content type sent is not a plain text, if the connection could
-	 *           not be made and gazillion other reasons
+	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(String anUri, AbstractContent content) throws IOException {
 		return text(URI.create(anUri), content);
@@ -262,8 +246,7 @@ public class Resty {
 	 *          the content to POST to the URI
 	 * @return
 	 * @throws IOException
-	 *           if uri is wrong or no connection could be made or for 10 zillion
-	 *           other reasons
+	 *           if uri is wrong or no connection could be made or for 10 zillion other reasons
 	 */
 	public XMLResource xml(URI anUri, AbstractContent requestContent) throws IOException {
 		return doPOSTOrPUT(anUri, requestContent, new XMLResource());
@@ -327,15 +310,13 @@ public class Resty {
 		return fillResourceFromURL(con, resource);
 	}
 
-	protected <T extends AbstractResource> T doPOSTOrPUT(URI anUri, AbstractContent requestContent, T resource)
-			throws IOException {
-		URLConnection con = openConnection(anUri,resource);
+	protected <T extends AbstractResource> T doPOSTOrPUT(URI anUri, AbstractContent requestContent, T resource) throws IOException {
+		URLConnection con = openConnection(anUri, resource);
 		requestContent.addContent(con);
 		return fillResourceFromURL(con, resource);
 	}
-	
-	protected <T extends AbstractResource> URLConnection openConnection(URI anUri, T resource)
-			throws IOException, MalformedURLException {
+
+	protected <T extends AbstractResource> URLConnection openConnection(URI anUri, T resource) throws IOException, MalformedURLException {
 		URLConnection con = anUri.toURL().openConnection();
 		addStandardHeaders(con, resource);
 		addAdditionalHeaders(con);
@@ -346,7 +327,7 @@ public class Resty {
 	}
 
 	protected void addAdditionalHeaders(URLConnection con) {
-		for (Map.Entry<String, String> header:getAdditionalHeaders().entrySet()) {
+		for (Map.Entry<String, String> header : getAdditionalHeaders().entrySet()) {
 			con.addRequestProperty(header.getKey(), header.getValue());
 		}
 	}
@@ -357,11 +338,9 @@ public class Resty {
 	}
 
 	/**
-	 * Get the content from the URLConnection, create a Resource representing the
-	 * content and carry over some metadata like HTTP Result and location header.
+	 * Get the content from the URLConnection, create a Resource representing the content and carry over some metadata like HTTP Result and location header.
 	 * 
-	 * @param <T extends AbstractResource> the resource that will be created and
-	 *        filled
+	 * @param <T extends AbstractResource> the resource that will be created and filled
 	 * @param con
 	 *          the URLConnection used to get the data
 	 * @param resourceClass
@@ -369,17 +348,14 @@ public class Resty {
 	 * @return the new resource
 	 * @throws IOException
 	 */
-	protected <T extends AbstractResource> T fillResourceFromURL(URLConnection con, T resource)
-			throws IOException {
+	protected <T extends AbstractResource> T fillResourceFromURL(URLConnection con, T resource) throws IOException {
 		resource.fill(con);
 		resource.getAdditionalHeaders().putAll(getAdditionalHeaders()); // carry over additional headers TODO don't do it if there are no additional headers
 		return resource;
 	}
 
 	/**
-	 * Create a JSONPathQuery to extract data from a JSON object. This is usually
-	 * used to extract a URI and use it in json|text|xml(JSONPathQuery...) methods
-	 * of JSONResource. <code>
+	 * Create a JSONPathQuery to extract data from a JSON object. This is usually used to extract a URI and use it in json|text|xml(JSONPathQuery...) methods of JSONResource. <code>
 	 * Resty r = new Resty();
 	 * r.json(someUrl).json(path("path.to.url.in.json"));
 	 * </code>
@@ -392,10 +368,8 @@ public class Resty {
 	}
 
 	/**
-	 * Create an XPathQuery to extract data from an XML document. This is usually
-	 * used to extract a URI and use it in json|text|xml(XPathQuery...) methods.
-	 * In this case, your XPath must result in a String value, i.e. it can't just
-	 * extract an Element.
+	 * Create an XPathQuery to extract data from an XML document. This is usually used to extract a URI and use it in json|text|xml(XPathQuery...) methods. In this case, your XPath must result in a
+	 * String value, i.e. it can't just extract an Element.
 	 * 
 	 * @param anXPathExpression
 	 *          an XPath expression with result type String
@@ -423,8 +397,7 @@ public class Resty {
 	}
 
 	/**
-	 * Create a content object from plain text. Use this to POST the content to a
-	 * URL.
+	 * Create a content object from plain text. Use this to POST the content to a URL.
 	 * 
 	 * @param somePlainText
 	 *          the plain text to send
@@ -440,10 +413,10 @@ public class Resty {
 	}
 
 	/**
-	 * Create a content object from a byte array. Use this to POST the content to a
-	 * URL with mime type application/octet-stream.
+	 * Create a content object from a byte array. Use this to POST the content to a URL with mime type application/octet-stream.
 	 * 
-	 * @param bytes the bytes to send
+	 * @param bytes
+	 *          the bytes to send
 	 * @return the content to send
 	 */
 	public static Content content(byte[] bytes) {
@@ -461,37 +434,43 @@ public class Resty {
 		FormContent fc = new FormContent(query);
 		return fc;
 	}
-	
-	/** Create form content to be sent as multipart/form-data. 
-	 * Useful if you want to upload files or have tons of form data that looks really ugly in a URL.
-	 *  
+
+	/**
+	 * Create form content to be sent as multipart/form-data. Useful if you want to upload files or have tons of form data that looks really ugly in a URL.
+	 * 
 	 * 
 	 */
 	public static MultipartContent form(FormData... formData) {
 		MultipartContent mc = new MultipartContent("form-data", formData);
 		return mc;
 	}
-	
-	/** Create a plain/text form data entry for a multipart form.
+
+	/**
+	 * Create a plain/text form data entry for a multipart form.
 	 * 
-	 * @param name the name of the control of the form
-	 * @param plainTextValue the plain text value
+	 * @param name
+	 *          the name of the control of the form
+	 * @param plainTextValue
+	 *          the plain text value
 	 * @return the FormData part used in a multipart/form-data upload
 	 */
 	public static FormData data(String name, String plainTextValue) {
 		return data(name, content(plainTextValue));
 	}
-	
-	/** Create a form data entry for a multipart form with any kind of content type.
+
+	/**
+	 * Create a form data entry for a multipart form with any kind of content type.
 	 * 
-	 * @param name the name of the control or variable in a form
-	 * @param content the content to send
+	 * @param name
+	 *          the name of the control or variable in a form
+	 * @param content
+	 *          the content to send
 	 * @return
 	 */
 	public static FormData data(String name, AbstractContent content) {
 		return new FormData(name, content);
 	}
-	
+
 	// TODO more form data stuff
 
 	/**
@@ -508,59 +487,67 @@ public class Resty {
 		} // UTF-8 is never unsupported
 		return null;
 	}
-	
-	/** Tell Resty to replace the specified content on the server, resulting in a PUT operation instead of a POST operation.
-	 * Example use: r.json(uri, put(content("bubu")));
+
+	/**
+	 * Tell Resty to replace the specified content on the server, resulting in a PUT operation instead of a POST operation. Example use: r.json(uri, put(content("bubu")));
 	 */
 	public static AbstractContent put(Content someContent) {
 		return new Replacement(someContent);
 	}
-	
-	/** Tell Resty to delete the URL content on the server, resulting in a DELETE.
-	 * Example use: r.json(uri,delete());
+
+	/**
+	 * Tell Resty to delete the URL content on the server, resulting in a DELETE. Example use: r.json(uri,delete());
 	 */
 	public static AbstractContent delete() {
 		return new Deletion();
 	}
 
-	/** Tell Resty to send the specified header with each request done on this instance.
-	 * These headers will also be sent from any resource object returned by this instance.
-	 * I.e. chained calls will carry over the headers r.json(url).json(get("some.path.to.a.url")); 
-	 * Multiple headers of the same type are not supported (yet).
+	/**
+	 * Tell Resty to send the specified header with each request done on this instance. These headers will also be sent from any resource object returned by this instance. I.e. chained calls will carry
+	 * over the headers r.json(url).json(get("some.path.to.a.url")); Multiple headers of the same type are not supported (yet).
 	 * 
-	 * @param aHeader the header to send
-	 * @param aValue the value
+	 * @param aHeader
+	 *          the header to send
+	 * @param aValue
+	 *          the value
 	 */
 	public void alwaysSend(String aHeader, String aValue) {
 		getAdditionalHeaders().put(aHeader, aValue);
 	}
-	
-	/** Don't send a header that was formely added in the alwaysSend method.
+
+	/**
+	 * Don't send a header that was formely added in the alwaysSend method.
 	 * 
-	 * @param aHeader the header to remove
+	 * @param aHeader
+	 *          the header to remove
 	 */
 	public void dontSend(String aHeader) {
 		getAdditionalHeaders().remove(aHeader);
 	}
 
-	protected Map<String,String> getAdditionalHeaders() {
+	protected Map<String, String> getAdditionalHeaders() {
 		if (additionalHeaders == null) {
-			additionalHeaders = new HashMap<String,String>();
+			additionalHeaders = new HashMap<String, String>();
 		}
 		return additionalHeaders;
 	}
-	
-	/** Base class for Resty options. You can also create your own options. Override one of the apply methods
-	 * to change an object like URLConnection before it is being used.
+
+	/**
+	 * Base class for Resty options. You can also create your own options. Override one of the apply methods to change an object like URLConnection before it is being used.
+	 * 
 	 * @author beders
-	 *
+	 * 
 	 */
 	abstract public static class Option {
-		public void apply(URLConnection aConnection) {}
-		
-		/** Specify the connection timeout in milliseconds. 
+		public void apply(URLConnection aConnection) {
+		}
+
+		/**
+		 * Specify the connection timeout in milliseconds.
+		 * 
 		 * @see java.net.URLConnection#setConnectTimeout(int)
-		 * @param t the timeout
+		 * @param t
+		 *          the timeout
 		 * @return
 		 */
 		public static Timeout timeout(int t) {
@@ -572,14 +559,18 @@ public class Resty {
 			return null;
 		}
 	}
+
 	public static class Timeout extends Option {
 		private int timeout;
-		public Timeout(int t) { timeout = t; }
+
+		public Timeout(int t) {
+			timeout = t;
+		}
 
 		@Override
 		public void apply(URLConnection urlConnection) {
 			urlConnection.setConnectTimeout(timeout);
 		}
-		
+
 	}
 }
