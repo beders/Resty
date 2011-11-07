@@ -20,6 +20,10 @@ public abstract class AbstractResource extends Resty {
 	protected URLConnection urlConnection;
 	protected InputStream inputStream;
 
+	public AbstractResource(Option... options) {
+		super(options);
+	}
+
 	abstract String getAcceptedTypes();
 	
 	void fill(URLConnection anUrlConnection) throws IOException {

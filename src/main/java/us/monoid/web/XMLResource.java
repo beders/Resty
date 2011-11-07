@@ -27,13 +27,17 @@ import us.monoid.json.JSONException;
 public class XMLResource extends TextResource {
 	protected Document document;
 
+	public XMLResource(Option... options) {
+		super(options);
+	}
+
 	/** Return the DOM of the XML resource.
 	 * 
 	 * @return
 	 * @throws IOException
 	 */
 	public Document doc() throws IOException {
-		// if the stream has alread been read, use the text format
+		// if the stream has already been read, use the text format
 		InputSource is;
 		if (document == null) {
 			if (text == null) {

@@ -48,6 +48,9 @@ import us.monoid.web.mime.MultipartContent;
  * 
  * Resty objects are not re-entrant.
  * 
+ * You can also specify options when creating a Resty instance. Well, currently there is one option to set the timeout for connections.
+ * But you can also create your own options! See Resty.Option for more info.
+ * 
  * @author beders
  * 
  */
@@ -146,7 +149,11 @@ public class Resty {
 	 * @throws IOException
 	 */
 	public JSONResource json(URI anUri) throws IOException {
-		return doGET(anUri, new JSONResource());
+		return doGET(anUri, createJSONResource());
+	}
+
+	protected JSONResource createJSONResource() {
+		return new JSONResource(options);
 	}
 
 	/**
@@ -161,7 +168,7 @@ public class Resty {
 	 *           if uri is wrong or no connection could be made or for 10 zillion other reasons
 	 */
 	public JSONResource json(URI anUri, AbstractContent requestContent) throws IOException {
-		return doPOSTOrPUT(anUri, requestContent, new JSONResource());
+		return doPOSTOrPUT(anUri, requestContent, createJSONResource());
 	}
 
 	/** @see Resty#json(URI, Content) */
@@ -179,7 +186,11 @@ public class Resty {
 	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(URI anUri) throws IOException {
-		return doGET(anUri, new TextResource());
+		return doGET(anUri, createTextResource());
+	}
+
+	protected TextResource createTextResource() {
+		return new TextResource(options);
 	}
 
 	/**
@@ -192,7 +203,7 @@ public class Resty {
 	 *           if content type sent is not a plain text, if the connection could not be made and gazillion other reasons
 	 */
 	public TextResource text(URI anUri, AbstractContent content) throws IOException {
-		return doPOSTOrPUT(anUri, content, new TextResource());
+		return doPOSTOrPUT(anUri, content, createTextResource());
 	}
 
 	/**
@@ -241,7 +252,11 @@ public class Resty {
 	 * @throws IOException
 	 */
 	public XMLResource xml(URI anUri) throws IOException {
-		return doGET(anUri, new XMLResource());
+		return doGET(anUri, createXMLResource());
+	}
+
+	protected XMLResource createXMLResource() {
+		return new XMLResource(options);
 	}
 
 	/**
@@ -256,7 +271,7 @@ public class Resty {
 	 *           if uri is wrong or no connection could be made or for 10 zillion other reasons
 	 */
 	public XMLResource xml(URI anUri, AbstractContent requestContent) throws IOException {
-		return doPOSTOrPUT(anUri, requestContent, new XMLResource());
+		return doPOSTOrPUT(anUri, requestContent, createXMLResource());
 	}
 
 	/** @see Resty#xml(URI, Content) */
@@ -285,7 +300,11 @@ public class Resty {
 	 * @throws IOException
 	 */
 	public BinaryResource bytes(URI anUri) throws IOException {
-		return doGET(anUri, new BinaryResource());
+		return doGET(anUri, createBinaryResource());
+	}
+
+	protected BinaryResource createBinaryResource() {
+		return new BinaryResource(options);
 	}
 
 	/**
@@ -309,7 +328,7 @@ public class Resty {
 	 * @throws IOException
 	 */
 	public BinaryResource bytes(URI anUri, AbstractContent someContent) throws IOException {
-		return doPOSTOrPUT(anUri, someContent, new BinaryResource());
+		return doPOSTOrPUT(anUri, someContent, createBinaryResource());
 	}
 
 	protected <T extends AbstractResource> T doGET(URI anUri, T resource) throws IOException {
@@ -333,12 +352,14 @@ public class Resty {
 		return con;
 	}
 
+	/** Add all headers that have been set with the alwaysSend call. */
 	protected void addAdditionalHeaders(URLConnection con) {
 		for (Map.Entry<String, String> header : getAdditionalHeaders().entrySet()) {
 			con.addRequestProperty(header.getKey(), header.getValue());
 		}
 	}
 
+	/** Add all standard headers (User-Agent, Accept) to the URLConnection. */
 	protected <T extends AbstractResource> void addStandardHeaders(URLConnection con, T resource) {
 		con.setRequestProperty("User-Agent", userAgent);
 		con.setRequestProperty("Accept", resource.getAcceptedTypes());
@@ -362,9 +383,11 @@ public class Resty {
 	}
 
 	/**
-	 * Create a JSONPathQuery to extract data from a JSON object. This is usually used to extract a URI and use it in json|text|xml(JSONPathQuery...) methods of JSONResource. <code>
+	 * Create a JSONPathQuery to extract data from a JSON object. This is usually used to extract a URI and use it in json|text|xml(JSONPathQuery...) methods of JSONResource.
+	 * <code>
 	 * Resty r = new Resty();
 	 * r.json(someUrl).json(path("path.to.url.in.json"));
+	 * 
 	 * </code>
 	 * 
 	 * @param string
@@ -565,18 +588,23 @@ public class Resty {
 	}
 
 	/**
-	 * Base class for Resty options. You can also create your own options. Override one of the apply methods to change an object like URLConnection before it is being used.
+	 * Base class for Resty options. You can also create your own options. 
+	 * Override one of the apply methods to change an object like URLConnection before it is being used.
 	 * 
 	 * @author beders
 	 * 
 	 */
 	abstract public static class Option {
+		/** Override this to get access to the URLConnection before the actual connection is made.
+		 * 
+		 * @param aConnection
+		 */
 		public void apply(URLConnection aConnection) {
 		}
 
 		/**
 		 * Specify the connection timeout in milliseconds.
-		 * 
+		 * Example: <code><pre> new Resty(option(3000)); </pre></code> 
 		 * @see java.net.URLConnection#setConnectTimeout(int)
 		 * @param t
 		 *          the timeout
@@ -588,6 +616,7 @@ public class Resty {
 
 	}
 
+	/** Option to set a timeout. Use the static timeout method for added convenience. */
 	public static class Timeout extends Option {
 		private int timeout;
 

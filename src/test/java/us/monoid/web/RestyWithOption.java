@@ -7,7 +7,8 @@ public class RestyWithOption {
 
 		@Test
 		public void testOptions() {
-			new Resty(Option.timeout(3000), Option.ignoreInvalidCertificates());
+			/** Configure Resty with a socket timeout of 3000ms */
+			new Resty(Option.timeout(3000));
 		}
 		
 }

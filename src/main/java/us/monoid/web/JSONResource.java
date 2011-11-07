@@ -18,6 +18,9 @@ import us.monoid.json.JSONTokener;
 public class JSONResource extends AbstractResource {
 	JSONObject json;
 	
+	public JSONResource(Option... options) {
+		super(options);
+	}
 	/** 
 	 * Parse and return JSON object. Parsing is done only once after which the inputStrem is at EOF.
 	 * @return the JSON object

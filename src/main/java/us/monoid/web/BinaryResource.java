@@ -9,11 +9,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * All purpose resource which is used to access application/octet-stream content or any content in that respect
+ * All-purpose resource which is used to access application/octet-stream content or any content in that respect.
+ * I.e. it will match all types, so you can also download raw JSON or images or whatever media type you envision.
  * @author beders
  *
  */
 public class BinaryResource extends AbstractResource {
+
+	public BinaryResource(Option... options) {
+		super(options);
+	}
 
 	/* (non-Javadoc)
 	 * @see us.monoid.web.AbstractResource#getAcceptedTypes()
