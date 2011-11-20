@@ -84,7 +84,7 @@
     <scope>test</scope>
 </dependency>
   	<dependency>
-  		<groupId>javacc</groupId>
+  		<groupId>net.java.dev.javacc</groupId>
   		<artifactId>javacc</artifactId>
   		<version>4.1</version>
   		<type>jar</type>
