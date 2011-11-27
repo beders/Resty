@@ -2,6 +2,7 @@ package us.monoid.web.jp.javacc;
 
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
+import us.monoid.web.jp.javacc.JSONPathCompiler.JSONPathExpr;
 
 public class Predicates {
 	public interface Test {
@@ -9,18 +10,21 @@ public class Predicates {
 	}
 
 	static class Operator implements Test {
-		String fieldName;
+		JSONPathExpr expr;
 		char ops;
 		Comparable value;
 
-		Operator(String aFieldName, String anOperator, Comparable aValue) {
-			fieldName = aFieldName;
+		Operator(JSONPathExpr aSubExpr, String anOperator, Comparable aValue) {
+			expr = aSubExpr;
 			ops = anOperator.charAt(0);
 			value = aValue;
 		}
 
 		public boolean test(JSONObject json) throws JSONException {
-			Comparable val = (Comparable) json.get(fieldName);
+			Comparable val = (Comparable) expr.eval(json);
+			if (val instanceof Number) { // fix comparison between Integers and Doubles by making sure the extracted value is a double
+				val = ((Number)val).doubleValue();
+			}
 			int comparisonResult = val.compareTo(value);
 			switch (ops) {
 			case '>':
@@ -35,6 +39,15 @@ public class Predicates {
 
 	}
 	
+	static class Existence implements Test {
+		
+		@Override
+		public boolean test(JSONObject json) throws JSONException {
+			// 
+			return false;
+		}
+		
+	}
 	static class Identity implements Test {
 		Test child;
 		Identity(Test aChild) { child = aChild; }

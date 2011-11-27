@@ -2,18 +2,49 @@
 /*@egen*/options{  STATIC = false;  DEBUG_PARSER = false;  ERROR_REPORTING = true;                                                                                             }PARSER_BEGIN(JSONPathCompiler)package us.monoid.web.jp.javacc;import us.monoid.json.*;public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeConstants/*@egen*/ {/*@bgen(jjtree)*/
   protected JJTJSONPathCompilerState jjtree = new JJTJSONPathCompilerState();
 
-/*@egen*/  public static class JSONPathExpr extends AbstractJSONExpr {    JSONPathExpr(int i) {      super (i);    }    public void dump(String prefix) {      System.out.println(prefix + toString());      if (children != null && children.length > 0) {        System.out.println(prefix + " [");        for (int i = 0; children != null && i < children.length; ++i) {          System.out.print(prefix + " (" + (i + 1) + ")");          SimpleNode c = (SimpleNode) children [i];          if (c == null) {            System.out.println("null");          } else {            c.dump(prefix + " ");          }        }        System.out.println(prefix + " ]");      }    }    public Object eval(Object o) throws JSONException {      if (o == null) return null;      switch (this.id) {        case JJTEXPRESSION: {          if (getChildrenCount() == 0) return null;          for (int i = 0; o != null && i < getChildrenCount(); ++i) {            o = at(i).eval(o);          }          return o;        }        case JJTARRAY: {          if (this.value instanceof Integer) {          int index = Integer.class.cast(this.value);          if (o instanceof JSONArray) {            JSONArray array = JSONArray.class.cast(o);            return array.get(index);     	   } else {    	    return null;    	   }    	 } else { // AST contains a selector expression. evaluate it against all objects in array 			if (o instanceof JSONArray) {            	JSONArray array = JSONArray.class.cast(o);            	// match first strategy. only one item is returned            	Object result = null;            	match:            	for (int i = 0, len = array.length(); i < len; i++) {            	  Object item = array.get(i);            	  boolean test = at(0).test(item);           		  if (test) {           		    result = item; // evaluation can continue on this item           		  	break;           		 }            	}            	return result;        	}  	    	 }        }        case JJTOBJECT: {          if (o instanceof JSONObject) {            JSONObject json = JSONObject.class.cast(o);            return json.get(this.value.toString());          }          return null;        }                default : System.err.println("Doesn't handle " + this.id);        break;      }      return null;    }  }  static SimpleNode jjtCreate(int id)  {    return new JSONPathExpr(id);  }  public static void main(String args []) throws Exception  {    try    {      java.io.StringReader r = new java.io.StringReader(args [0]);      JSONPathCompiler app = new JSONPathCompiler(r);      JSONPathExpr x = JSONPathExpr.class.cast(app.expr());      x.dump(" ");      JSONObject json = new JSONObject("{ \"a\": [" +      "{\"Hello\": \"World\"},{\"Hello\": \"JB\"}]" +      ", \"b\": null, \"c\": { \"d\": 1234 }}");      Object o = x.eval(json);      System.err.println("Compiling <code>" + args [0] + "</code>");      System.err.println("Eval <code>" + json + "</code>");      System.err.println("Result is:<code>" + o + "</code>");    } catch (Exception err) {      err.printStackTrace();    }  }}PARSER_END(JSONPathCompiler)SKIP :{  " "| "\t"| "\n"| "\r"}TOKEN :{  < #LETTER : [ "$", "_", "a"-"z", "A"-"Z" ] >| < CNAME : "'" (~["'"])* "'" >| < #DIGIT : [ "0"-"9" ] >| < #DIGIT19 : [ "1"-"9" ] >| < DOT : "." >| < OR : "||" >| < AND : "&&" >| < NOT : "!" >| < OP : [ ">", "<", "="] > | < INTEGER : ([ "-" ])? (< DIGIT > | < DIGIT19 > (< DIGIT >)* ) >| < NUMBER : < INTEGER > < FRAC > <EXP > | < INTEGER > <EXP > | < INTEGER > < FRAC > >| < FRAC: < DOT > (< DIGIT >)+ >| < EXP: < EXPONENT > (< DIGIT >)+ >| < EXPONENT: ["E", "e"] ([ "+", "-" ])? >| < IDENTIFIER :    < LETTER >    (      < LETTER >    | < DIGIT >    )* >| < OPEN_ARRAY : "[" >| < CLOSE_ARRAY : "]" >}JSONPathExpr expr()             :{/*@bgen(jjtree) EXPRESSION */
+/*@egen*/    public static class JSONPathExpr extends AbstractJSONExpr {    JSONPathExpr(int i) {      super (i);    }    public void dump(String prefix) {      System.out.println(prefix + toString());      if (children != null && children.length > 0) {        System.out.println(prefix + " [");        for (int i = 0; children != null && i < children.length; ++i) {          System.out.print(prefix + " (" + (i + 1) + ")");          SimpleNode c = (SimpleNode) children [i];          if (c == null) {            System.out.println("null");          } else {            c.dump(prefix + " ");          }        }        System.out.println(prefix + " ]");      }    }    public Object eval(Object o) throws JSONException {      if (o == null) return null;      switch (this.id) {        case JJTEXPRESSION: {          if (getChildrenCount() == 0) return null;          for (int i = 0; o != null && i < getChildrenCount(); ++i) {            o = at(i).eval(o);          }          return o;        }        case JJTARRAY: {          if (this.value instanceof Integer) {          int index = Integer.class.cast(this.value);          if (o instanceof JSONArray) {            JSONArray array = JSONArray.class.cast(o);            return array.get(index);     	   } else {    	    return null;    	   }    	 } else { // AST contains a selector expression. evaluate it against all objects in array 			if (o instanceof JSONArray) {            	JSONArray array = JSONArray.class.cast(o);            	// match first strategy. only one item is returned            	Object result = null;            	match:            	for (int i = 0, len = array.length(); i < len; i++) {            	  Object item = array.get(i);            	  boolean test = at(0).test(item);           		  if (test) {           		    result = item; // evaluation can continue on this item           		  	break;           		 }            	}            	return result;        	}  	    	 }        }        case JJTOBJECT: {          if (o instanceof JSONObject) {            JSONObject json = JSONObject.class.cast(o);            return json.get(this.value.toString());          }          return null;        }                default : System.err.println("Doesn't handle " + this.id);        break;      }      return null;    }  }  static SimpleNode jjtCreate(int id)  {    return new JSONPathExpr(id);  }  public static void main(String args []) throws Exception  {    try    {      java.io.StringReader r = new java.io.StringReader(args [0]);      JSONPathCompiler app = new JSONPathCompiler(r);      JSONPathExpr x = JSONPathExpr.class.cast(app.expr());      x.dump(" ");      JSONObject json = new JSONObject("{ \"a\": [" +      "{\"Hello\": \"World\"},{\"Hello\": \"JB\"}]" +      ", \"b\": null, \"c\": { \"d\": 1234 }}");      Object o = x.eval(json);      System.err.println("Compiling <code>" + args [0] + "</code>");      System.err.println("Eval <code>" + json + "</code>");      System.err.println("Result is:<code>" + o + "</code>");    } catch (Exception err) {      err.printStackTrace();    }  }}PARSER_END(JSONPathCompiler)SKIP :{  " "| "\t"| "\n"| "\r"}TOKEN :{  < OPEN_ARRAY : "[" >| < CLOSE_ARRAY : "]" >|   < #LETTER : [ "$", "_", "a"-"z", "A"-"Z" ] >| < CNAME : "'" (~["'"])* "'" >| < #DIGIT : [ "0"-"9" ] >| < #DIGIT19 : [ "1"-"9" ] >| < OTHER : "-" >| < DOT : "." >| < OR : "||" >| < AND : "&&" >| < NOT : "!" >| < OP : [ ">", "<", "="] > | < INTEGER : ([ "-" ])? (< DIGIT > | < DIGIT19 > (< DIGIT >)* ) >| < NUMBER : < INTEGER > < FRAC > <EXP > | < INTEGER > <EXP > | < INTEGER > < FRAC > >| < FRAC: < DOT > (< DIGIT >)+ >| < EXP: < EXPONENT > (< DIGIT >)+ >| < EXPONENT: ["E", "e"] ([ "+", "-" ])? >| < IDENTIFIER :    < LETTER >    (      < LETTER >    | < DIGIT >    | < OTHER >    )* >}JSONPathExpr json()             :{/*@bgen(jjtree) EXPRESSION */
+  JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTEXPRESSION);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}{/*@bgen(jjtree) EXPRESSION */
+  try {
+/*@egen*/  expr() < EOF >/*@bgen(jjtree)*/
+   {
+     jjtree.closeNodeScope(jjtn000, true);
+     jjtc000 = false;
+   }
+/*@egen*/   {    return jjtn000;  }/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/}JSONPathExpr expr()             :{/*@bgen(jjtree) EXPRESSION */
   JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTEXPRESSION);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
 /*@egen*/}{/*@bgen(jjtree) EXPRESSION */
   try {
-/*@egen*/  (    array()  | object()  )  (    array()  | < DOT > object()  )*  < EOF >/*@bgen(jjtree)*/
+/*@egen*/  (    array()  | object()  )  (    array()  | < DOT > object()  )*/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
   }
-/*@egen*/  {    return jjtn000;  }/*@bgen(jjtree)*/
+/*@egen*/    {    return jjtn000;  }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -172,20 +203,34 @@
   JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTPREDICATE);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/  Token field, test, string = null, number = null;  }{/*@bgen(jjtree) predicate */
-        try {
-/*@egen*/	field = < IDENTIFIER > test = < OP > ( string = < CNAME > | number = < INTEGER > | number = < NUMBER > )/*@bgen(jjtree)*/
-        {
-          jjtree.closeNodeScope(jjtn000, true);
-          jjtc000 = false;
-        }
-/*@egen*/	{	  if (number != null) {	  jjtn000.value = new Predicates.Operator(field.image, test.image, new Double(number.image));	 } else {	  jjtn000.value = new Predicates.Operator(field.image, test.image, string.image.substring(1,string.image.length()-1));	}  	}/*@bgen(jjtree)*/
-        } finally {
-          if (jjtc000) {
-            jjtree.closeNodeScope(jjtn000, true);
-          }
-        }
-/*@egen*/}void object()         :{/*@bgen(jjtree) OBJECT */
+/*@egen*/  JSONPathExpr expression; Token test = null, string = null, number = null;}{/*@bgen(jjtree) predicate */
+    try {
+/*@egen*/    expression = expr() (test = < OP > ( string = < CNAME > | number = < INTEGER > | number = < NUMBER > ))?/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/  {    if (number != null) {	  jjtn000.value = new Predicates.Operator(expression, test.image, new Double(number.image));	 } else {	  jjtn000.value = new Predicates.Operator(expression, test.image, string.image.substring(1,string.image.length()-1));	}  }/*@bgen(jjtree)*/
+    } catch (Throwable jjte000) {
+      if (jjtc000) {
+        jjtree.clearNodeScope(jjtn000);
+        jjtc000 = false;
+      } else {
+        jjtree.popNode();
+      }
+      if (jjte000 instanceof RuntimeException) {
+        throw (RuntimeException)jjte000;
+      }
+      if (jjte000 instanceof ParseException) {
+        throw (ParseException)jjte000;
+      }
+      throw (Error)jjte000;
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/}void object()         :{/*@bgen(jjtree) OBJECT */
   JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTOBJECT);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);

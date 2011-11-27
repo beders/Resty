@@ -44,23 +44,23 @@ public class RestyTest {
 		assertTrue(t.contains(GOOGLE_QUERY_DATA));
 	}
 	
-	@Test
-	public void postYahoo() throws Exception {
-		Resty r = new Resty();
-		String firstResult = r.xml("http://api.search.yahoo.com/WebSearchService/V1/webSearch",
-				form("appid=YahooDemo&query=Resty+java&results=10")).get("/ResultSet/Result[1]/Title",String.class);
-		System.out.println(firstResult);
-		
-	}
-	
-	@Test
-	public void postMultipartYahoo() throws Exception {
-		Resty r = new Resty();
-		String firstResult = r.xml("http://api.search.yahoo.com/WebSearchService/V1/webSearch",
-				form(data("appid","YahooDemo"),data("query", "Resty+java"), data("results", "10"))).get("/ResultSet/Result[1]/Title",String.class);
-		System.out.println(firstResult);
-		
-	}
+//	@Test  Search API is not available anymore
+//	public void postYahoo() throws Exception {
+//		Resty r = new Resty();
+//		String firstResult = r.xml("http://api.search.yahoo.com/WebSearchService/V1/webSearch",
+//				form("appid=YahooDemo&query=Resty+java&results=10")).get("/ResultSet/Result[1]/Title",String.class);
+//		System.out.println(firstResult);
+//		
+//	}
+//	
+//	@Test  this search API is not available anymore
+//	public void postMultipartYahoo() throws Exception {
+//		Resty r = new Resty();
+//		String firstResult = r.xml("http://api.search.yahoo.com/WebSearchService/V1/webSearch",
+//				form(data("appid","YahooDemo"),data("query", "Resty+java"), data("results", "10"))).get("/ResultSet/Result[1]/Title",String.class);
+//		System.out.println(firstResult);
+//		
+//	}
 
 	
 }

@@ -4,7 +4,8 @@ package us.monoid.web.jp.javacc;
 import us.monoid.json.*;
 
 public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeConstants, JSONPathCompilerConstants {/*@bgen(jjtree)*/
-  protected JJTJSONPathCompilerState jjtree = new JJTJSONPathCompilerState();public static class JSONPathExpr extends AbstractJSONExpr {
+  protected JJTJSONPathCompilerState jjtree = new JJTJSONPathCompilerState();
+  public static class JSONPathExpr extends AbstractJSONExpr {
     JSONPathExpr(int i) {
       super (i);
     }
@@ -99,6 +100,39 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     }
   }
 
+  final public JSONPathExpr json() throws ParseException {
+ /*@bgen(jjtree) EXPRESSION */
+  JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTEXPRESSION);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+    try {
+      expr();
+      jj_consume_token(0);
+     jjtree.closeNodeScope(jjtn000, true);
+     jjtc000 = false;
+    {if (true) return jjtn000;}
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+    throw new Error("Missing return statement in function");
+  }
+
   final public JSONPathExpr expr() throws ParseException {
  /*@bgen(jjtree) EXPRESSION */
   JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTEXPRESSION);
@@ -120,8 +154,8 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
       label_1:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case DOT:
         case OPEN_ARRAY:
+        case DOT:
           ;
           break;
         default:
@@ -142,7 +176,6 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
           throw new ParseException();
         }
       }
-      jj_consume_token(0);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
     {if (true) return jjtn000;}
@@ -180,9 +213,10 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
         i = jj_consume_token(INTEGER);
     jjtn000.value = new Integer(i.image);
         break;
+      case OPEN_ARRAY:
       case NOT:
       case IDENTIFIER:
-      case 22:
+      case 23:
         selector();
 
         break;
@@ -343,13 +377,14 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case OPEN_ARRAY:
       case IDENTIFIER:
         predicate();
         break;
-      case 22:
-        jj_consume_token(22);
-        selector();
+      case 23:
         jj_consume_token(23);
+        selector();
+        jj_consume_token(24);
         break;
       default:
         jj_la1[7] = jj_gen;
@@ -381,36 +416,58 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
  /*@bgen(jjtree) predicate */
   JSONPathExpr jjtn000 = (JSONPathExpr)JSONPathCompiler.jjtCreate(JJTPREDICATE);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);Token field, test, string = null, number = null;
+  jjtree.openNodeScope(jjtn000);JSONPathExpr expression;
+ Token test = null, string = null, number = null;
     try {
-      field = jj_consume_token(IDENTIFIER);
-      test = jj_consume_token(OP);
+      expression = expr();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case CNAME:
-        string = jj_consume_token(CNAME);
-        break;
-      case INTEGER:
-        number = jj_consume_token(INTEGER);
-        break;
-      case NUMBER:
-        number = jj_consume_token(NUMBER);
+      case OP:
+        test = jj_consume_token(OP);
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case CNAME:
+          string = jj_consume_token(CNAME);
+          break;
+        case INTEGER:
+          number = jj_consume_token(INTEGER);
+          break;
+        case NUMBER:
+          number = jj_consume_token(NUMBER);
+          break;
+        default:
+          jj_la1[8] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
         break;
       default:
-        jj_la1[8] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        jj_la1[9] = jj_gen;
+        ;
       }
-          jjtree.closeNodeScope(jjtn000, true);
-          jjtc000 = false;
-          if (number != null) {
-          jjtn000.value = new Predicates.Operator(field.image, test.image, new Double(number.image));
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    if (number != null) {
+          jjtn000.value = new Predicates.Operator(expression, test.image, new Double(number.image));
          } else {
-          jjtn000.value = new Predicates.Operator(field.image, test.image, string.image.substring(1,string.image.length()-1));
+          jjtn000.value = new Predicates.Operator(expression, test.image, string.image.substring(1,string.image.length()-1));
         }
+    } catch (Throwable jjte000) {
+      if (jjtc000) {
+        jjtree.clearNodeScope(jjtn000);
+        jjtc000 = false;
+      } else {
+        jjtree.popNode();
+      }
+      if (jjte000 instanceof RuntimeException) {
+        {if (true) throw (RuntimeException)jjte000;}
+      }
+      if (jjte000 instanceof ParseException) {
+        {if (true) throw (ParseException)jjte000;}
+      }
+      {if (true) throw (Error)jjte000;}
     } finally {
-          if (jjtc000) {
-            jjtree.closeNodeScope(jjtn000, true);
-          }
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
     }
   }
 
@@ -440,13 +497,13 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[9];
+  final private int[] jj_la1 = new int[10];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x180000,0x100200,0x100200,0x485000,0x400,0x800,0x1000,0x480000,0xc040,};
+      jj_la1_0 = new int[] {0x400020,0x1020,0x1020,0xc28020,0x2000,0x4000,0x8000,0xc00020,0x60100,0x10000,};
    }
 
   /** Constructor with InputStream. */
@@ -460,7 +517,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -475,7 +532,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -485,7 +542,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -496,7 +553,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -505,7 +562,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -515,7 +572,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 9; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -566,12 +623,12 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[24];
+    boolean[] la1tokens = new boolean[25];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 10; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -580,7 +637,7 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
         }
       }
     }
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 25; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

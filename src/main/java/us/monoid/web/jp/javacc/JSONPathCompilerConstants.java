@@ -11,39 +11,41 @@ public interface JSONPathCompilerConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int LETTER = 5;
+  int OPEN_ARRAY = 5;
   /** RegularExpression Id. */
-  int CNAME = 6;
+  int CLOSE_ARRAY = 6;
   /** RegularExpression Id. */
-  int DIGIT = 7;
+  int LETTER = 7;
   /** RegularExpression Id. */
-  int DIGIT19 = 8;
+  int CNAME = 8;
   /** RegularExpression Id. */
-  int DOT = 9;
+  int DIGIT = 9;
   /** RegularExpression Id. */
-  int OR = 10;
+  int DIGIT19 = 10;
   /** RegularExpression Id. */
-  int AND = 11;
+  int OTHER = 11;
   /** RegularExpression Id. */
-  int NOT = 12;
+  int DOT = 12;
   /** RegularExpression Id. */
-  int OP = 13;
+  int OR = 13;
   /** RegularExpression Id. */
-  int INTEGER = 14;
+  int AND = 14;
   /** RegularExpression Id. */
-  int NUMBER = 15;
+  int NOT = 15;
   /** RegularExpression Id. */
-  int FRAC = 16;
+  int OP = 16;
   /** RegularExpression Id. */
-  int EXP = 17;
+  int INTEGER = 17;
   /** RegularExpression Id. */
-  int EXPONENT = 18;
+  int NUMBER = 18;
   /** RegularExpression Id. */
-  int IDENTIFIER = 19;
+  int FRAC = 19;
   /** RegularExpression Id. */
-  int OPEN_ARRAY = 20;
+  int EXP = 20;
   /** RegularExpression Id. */
-  int CLOSE_ARRAY = 21;
+  int EXPONENT = 21;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 22;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -55,10 +57,13 @@ public interface JSONPathCompilerConstants {
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
+    "\"[\"",
+    "\"]\"",
     "<LETTER>",
     "<CNAME>",
     "<DIGIT>",
     "<DIGIT19>",
+    "\"-\"",
     "\".\"",
     "\"||\"",
     "\"&&\"",
@@ -70,8 +75,6 @@ public interface JSONPathCompilerConstants {
     "<EXP>",
     "<EXPONENT>",
     "<IDENTIFIER>",
-    "\"[\"",
-    "\"]\"",
     "\"(\"",
     "\")\"",
   };

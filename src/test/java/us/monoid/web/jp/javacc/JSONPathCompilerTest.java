@@ -70,12 +70,21 @@ public class JSONPathCompilerTest {
     System.out.println(result);
     assertEquals("Evelyn Waugh", result);
     
+    evaluator = parse("store.book[reviewed-by.name='JB'].author");
+		result = evaluator.eval(json);
+    System.out.println(result);
+    assertEquals("Nigel Rees", result); 
+    
+    evaluator = parse("store.book[vendors[name='Amazon']].author");
+		result = evaluator.eval(json);
+    System.out.println(result);
+    assertEquals("Evelyn Waugh", result); 
 	}
 	
 	JSONPathCompiler.JSONPathExpr parse(String path) throws ParseException {
 		java.io.StringReader r = new java.io.StringReader(path);
     JSONPathCompiler app = new JSONPathCompiler(r);
-    JSONPathCompiler.JSONPathExpr x = JSONPathCompiler.JSONPathExpr.class.cast(app.expr());
+    JSONPathCompiler.JSONPathExpr x = JSONPathCompiler.JSONPathExpr.class.cast(app.json());
     x.dump(" ");
     return x;
 	}

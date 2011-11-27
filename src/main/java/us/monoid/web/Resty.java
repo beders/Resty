@@ -5,7 +5,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -74,6 +76,7 @@ public class Resty {
 	}
 
 	protected String userAgent = DEFAULT_USER_AGENT;
+	private Proxy proxy = Proxy.NO_PROXY;
 	private Map<String, String> additionalHeaders;
 	private Option[] options;
 
@@ -355,7 +358,7 @@ public class Resty {
 	}
 
 	protected <T extends AbstractResource> URLConnection openConnection(URI anUri, T resource) throws IOException, MalformedURLException {
-		URLConnection con = anUri.toURL().openConnection();
+		URLConnection con = anUri.toURL().openConnection(proxy);
 		addStandardHeaders(con, resource);
 		addAdditionalHeaders(con);
 		for (Option o : options) {
@@ -597,6 +600,10 @@ public class Resty {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setProxy(String proxyhost, int proxyport) {
+		proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyhost, proxyport));
 	}
 
 	/**

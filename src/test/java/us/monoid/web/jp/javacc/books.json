@@ -3,12 +3,14 @@
       { "category": "reference",
         "author": "Nigel Rees",
         "title": "Sayings of the Century",
-        "price": 8.95
+        "price": 8.95,
+        "reviewed-by": { "name": "JB" }
       },
       { "category": "fiction",
         "author": "Evelyn Waugh",
         "title": "Sword of Honour",
-        "price": 12.99
+        "price": 12.99,
+        "vendors": [ { "name": "Amazon" }, { "name": "B&N" } ]
       },
       { "category": "fiction",
         "author": "Herman Melville",
