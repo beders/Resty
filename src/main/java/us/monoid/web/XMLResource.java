@@ -146,7 +146,7 @@ public class XMLResource extends TextResource {
 	
 	@Override
 	String getAcceptedTypes() {
-		return "text/xml;application/xml;application/*+xml";
+		return "text/xml,application/xml,application/*+xml";
 	}
 
 }
