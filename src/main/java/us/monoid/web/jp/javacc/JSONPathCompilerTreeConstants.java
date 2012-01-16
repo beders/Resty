@@ -10,7 +10,8 @@ public interface JSONPathCompilerTreeConstants
   public int JJTNEG = 4;
   public int JJTPART = 5;
   public int JJTPREDICATE = 6;
-  public int JJTOBJECT = 7;
+  public int JJTIMAGE = 7;
+  public int JJTOBJECT = 8;
 
 
   public String[] jjtNodeName = {
@@ -21,7 +22,8 @@ public interface JSONPathCompilerTreeConstants
     "neg",
     "part",
     "predicate",
+    "IMAGE",
     "OBJECT",
   };
 }
-/* JavaCC - OriginalChecksum=cb9efdc99ba85cf6fe19ee3447111356 (do not edit this line) */
+/* JavaCC - OriginalChecksum=b8e96437e0cbdae2a9d570aaa7031380 (do not edit this line) */

@@ -26,6 +26,17 @@ import us.monoid.web.jp.javacc.JSONPathCompiler.JSONPathExpr;
  *
  */
 public class JSONPathCompilerTest {
+	
+	@Test
+	public void testSimplePath() throws Exception {
+		System.out.println(this.getClass().getResource("books.json"));
+		JSONObject json = read(this.getClass().getResource("books.json"));
+
+    JSONPathExpr evaluator = parse("store.book.reviewed-by");
+    Object result = evaluator.eval(json);
+    System.out.println(result);
+    assertTrue(result instanceof JSONObject);
+	}
 
 	/**
 	 * Test method for {@link us.monoid.web.jp.javacc.JSONPathCompiler#JSONPathCompiler(java.io.InputStream, java.lang.String)}.
@@ -75,10 +86,12 @@ public class JSONPathCompilerTest {
     System.out.println(result);
     assertEquals("Nigel Rees", result); 
     
-    evaluator = parse("store.book[vendors[name='Amazon']].author");
-		result = evaluator.eval(json);
-    System.out.println(result);
-    assertEquals("Evelyn Waugh", result); 
+    
+    
+//    evaluator = parse("store.book[vendors[name='Amazon']].author");
+//		result = evaluator.eval(json);
+//    System.out.println(result);
+//    assertEquals("Evelyn Waugh", result); 
 	}
 	
 	JSONPathCompiler.JSONPathExpr parse(String path) throws ParseException {

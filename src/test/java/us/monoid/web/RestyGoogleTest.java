@@ -15,9 +15,9 @@ public class RestyGoogleTest {
 		// &ll=37.815649,-122.477646
 		Resty r = new Resty();
 		String ggBridge = r.json("http://maps.googleapis.com/maps/api/geocode/json?latlng=37.815649,-122.477646&sensor=false").
-			get("results[address_components.short_name='San Francisco'].formatted_address").toString();
-		System.out.println(ggBridge);
-		assertTrue(ggBridge.contains("San Francisco"));
+			get("results[address_components.short_name='California 1'].formatted_address").toString();
+		System.out.println("GG:" + ggBridge);
+		assertTrue(ggBridge.contains("Golden Gate Bridge"));
 	}
 	
 	@Test

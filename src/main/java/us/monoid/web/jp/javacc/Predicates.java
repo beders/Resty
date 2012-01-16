@@ -10,22 +10,26 @@ public class Predicates {
 	}
 
 	static class Operator implements Test {
-		JSONPathExpr expr;
+		JSONPathExpr lhs;
 		char ops;
-		Comparable value;
+		JSONPathExpr rhs;
 
-		Operator(JSONPathExpr aSubExpr, String anOperator, Comparable aValue) {
-			expr = aSubExpr;
+		Operator(JSONPathExpr aSubExpr, String anOperator, JSONPathExpr aValue) {
+			lhs = aSubExpr;
 			ops = anOperator.charAt(0);
-			value = aValue;
+			rhs = aValue;
 		}
 
 		public boolean test(JSONObject json) throws JSONException {
-			Comparable val = (Comparable) expr.eval(json);
+			Comparable val = (Comparable) lhs.eval(json);
 			if (val instanceof Number) { // fix comparison between Integers and Doubles by making sure the extracted value is a double
 				val = ((Number)val).doubleValue();
 			}
-			int comparisonResult = val.compareTo(value);
+			if (rhs == null) {  // test for existence of an attribute
+				return json.has(val.toString());
+			} else {
+			Comparable rhsVal = (Comparable) rhs.eval(json);
+			int comparisonResult = val.compareTo(rhsVal);
 			switch (ops) {
 			case '>':
 				return comparisonResult > 0;
@@ -37,6 +41,7 @@ public class Predicates {
 			return false;
 		}
 
+		}
 	}
 	
 	static class Existence implements Test {
