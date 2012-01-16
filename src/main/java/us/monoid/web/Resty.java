@@ -7,7 +7,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.Proxy;
+
 import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -30,11 +30,30 @@ import us.monoid.web.mime.MultipartContent;
 /**
  * Main class. Use me! Use me! Resty is a small, convenient interface to talk to RESTful services.
  * 
- * Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials (optional), then call one of the content type specific methods. The idea is that the method name
+ * Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials (optional), then call one of the content type specific methods,
+ * like json(...), xml(...), text(...) or bytes(...). 
+ * 
+ * The idea is that the method name
  * will convey the expected content type you can then operate on. Most static methods help you build content objects or queries with a compact syntax. Static methods like put(...) and delete() are
  * used to implement the respective HTTP methods.
  * 
- * A neat trick to save you typing is to use import static us.monoid.web.Resty.*;
+ * A neat trick to save you typing is to use <pre><code>import static us.monoid.web.Resty.*;</code></pre>
+ * <p>
+ * 
+ * GETting an URL (as JSON):
+ * <pre><code>new Resty().json(url);</code></pre>
+ * 
+ * POSTing to an URL (using multipart/form-data) and expecting JSON back:
+ * <pre><code>new Resty().json(url, form(data("name", "Don Draper"), data("occupation", "Ad Man")));</code></pre>
+ * 
+ * PUTting content and expecting JSON back:
+ * <pre><code>
+ * new Resty().json(url, put(content(someJSON)));
+ * </code></pre>
+ * 
+ * DELETE a resource via URL expecting JSON back:
+ * <pre><code>new Resty().json(url, delete());</code></pre>
+ *
  * 
  * Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code:
  * 
@@ -76,7 +95,7 @@ public class Resty {
 	}
 
 	protected String userAgent = DEFAULT_USER_AGENT;
-	private Proxy proxy = Proxy.NO_PROXY;
+	private java.net.Proxy proxy = java.net.Proxy.NO_PROXY;
 	private Map<String, String> additionalHeaders;
 	private Option[] options;
 
@@ -97,6 +116,9 @@ public class Resty {
 	 */
 	public Resty setOptions(Option... someOptions) {
 		options = (someOptions == null) ? new Option[0] : someOptions;
+		for (Option o : options) {
+			o.init(this);
+		}
 		return this;
 	}
 
@@ -602,8 +624,15 @@ public class Resty {
 		}
 	}
 	
+	/** Set the proxy for this instance of Resty.
+	 * Note, that the proxy settings will be carried over to Resty instances created by this instance only if you used
+	 * new Resty(Option.proxy(...))!
+	 * 
+	 * @param proxyhost name of the host
+	 * @param proxyport port to be used
+	 */
 	public void setProxy(String proxyhost, int proxyport) {
-		proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyhost, proxyport));
+		proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(proxyhost, proxyport));
 	}
 
 	/**
@@ -614,16 +643,21 @@ public class Resty {
 	 * 
 	 */
 	abstract public static class Option {
+		
 		/** Override this to get access to the URLConnection before the actual connection is made.
-		 * 
 		 * @param aConnection
 		 */
 		public void apply(URLConnection aConnection) {
 		}
 
+		/** Callback from Resty when the option is set on the Resty instance. Called before any connection is made.
+		 * Override to set initial properties */
+		public void init(Resty resty) {
+		}
+
 		/**
 		 * Specify the connection timeout in milliseconds.
-		 * Example: <code><pre> new Resty(option(3000)); </pre></code> 
+		 * Example: <code><pre> new Resty(Option.timeout(3000)); </pre></code> 
 		 * @see java.net.URLConnection#setConnectTimeout(int)
 		 * @param t
 		 *          the timeout
@@ -632,7 +666,15 @@ public class Resty {
 		public static Timeout timeout(int t) {
 			return new Timeout(t);
 		}
-
+		
+		/** 
+		 * Set a proxy (overrides standard proxy settings)
+		 * @param aHostName the hostname to use
+		 * @param aPortNumber the port number
+		 */
+		public static Proxy proxy(String aHostName, int aPortNumber) {
+			return new Proxy(aHostName, aPortNumber);
+		}
 	}
 
 	/** Option to set a timeout. Use the static timeout method for added convenience. */
@@ -648,5 +690,20 @@ public class Resty {
 			urlConnection.setConnectTimeout(timeout);
 		}
 
+	}
+	
+	/** Option to set the proxy for a Resty instance.
+	 */
+	public static class Proxy extends Option {
+		private String host;
+		private int port;
+		public Proxy(String aHost, int aPort) {
+			host = aHost;
+			port = aPort;
+		}
+		@Override
+		public void init(Resty resty) {
+			resty.setProxy(host,port);
+		}
 	}
 }

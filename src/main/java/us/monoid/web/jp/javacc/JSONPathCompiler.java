@@ -2,6 +2,7 @@
 package us.monoid.web.jp.javacc;
 
 import us.monoid.json.*;
+import java.util.*;
 
 public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeConstants, JSONPathCompilerConstants {/*@bgen(jjtree)*/
   protected JJTJSONPathCompilerState jjtree = new JJTJSONPathCompilerState();
@@ -71,7 +72,8 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
           } else if (o instanceof JSONArray)
           {
             JSONArray array = JSONArray.class.cast(o);
-           // match first strategy. only one item is returned            Object result = null;
+           // return all items           List<Object > matches = new ArrayList<Object >();
+            Object result = null;
             for (int i = 0, len = array.length(); i < len; i++) {
               Object item = array.get(i);
               if (item instanceof JSONObject)
@@ -79,10 +81,11 @@ public class JSONPathCompiler/*@bgen(jjtree)*/implements JSONPathCompilerTreeCon
                              JSONObject obj = (JSONObject)item;
                              if (obj.has(this.value.toString()))
                              {
-                               return obj.get(this.value.toString());
+                               matches.add(obj.get(this.value.toString()));
                              }
               }
            }
+           return matches;
           }
           return null;
         }

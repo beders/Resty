@@ -13,6 +13,25 @@ It supports chaining several requests which is very useful in RESTful applicatio
 Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials, then call one of the content type specific methods.
 The idea is that the method name will convey the expected content type you can then operate on.
  
+  import static us.monoid.web.Resty.*;
+
+GETting an URL (as JSON):
+
+  new Resty().json(url);
+
+POSTing to an URL (using multipart/form-data) and expecting JSON back:
+
+  new Resty().json(url, form(data("name", "Don Draper"), data("occupation", "Ad Man")));
+
+PUTting content and expecting JSON back:
+
+
+  new Resty().json(url, put(content(someJSON)));
+ 
+DELETE a resource via URL expecting JSON back:
+
+  new Resty().json(url, delete());
+
 Here is an example on how to use the geonames web service. It retrieves the JSON object (see json.org for details) and gets the name of a place from the zip code::
   
  	Resty r = new Resty();
@@ -28,13 +47,30 @@ Features
 - Support for XPath expressions
 - Authentication with login/passwd
 - Automatic Cookie management
+- Full support for multipart/form-data
+- GAE compatible (no cookie support though)
+
+Changes
+-------
+
+Since 0.2.0: 
+- Support for PUT, DELETE, Support for application/multipart-formdata
+
+Since 0.3.0: 
+- Option to ignore SSL certificate errors: Resty.ignoreAllCerts (global switch for now)
+- New constructor to specify options: new Resty(Option.timeout(3000)); (sets the socket connect timeout)
+- Create your own Options (see Resty.Option.Timeout or Resty.Option.Proxy for example)
+- Fixed scala naming issue
+- enhanced syntax for JSON queries
+- bugfixes from my contributors. Thank you!
+- Proxy support. Thank you, Gabriel. r.setProxy(...) for object r or new Resty(Option.proxy(...)) to carry proxy settings over when traversing paths
+- convenient location header:  new Resty().bytes(url, put(someContent)).location(); // gets Location header as URI
 
 Status
 -------
 
 Growing
 
-- Some support for multipart/form-data yet. No nice support of multipart/mixed as sub-parts.
 - Some HTTP verbs still missing (HEAD, OPTIONS among them)
 - No explicit HTML support yet. Use text(...).toString() and feed it a parser like Jericho
 - No oauth support yet.
@@ -45,7 +81,7 @@ Either create the JAR yourself (see target directory or grab the rest-*.jar file
 Or grab it from Maven central::
  groupId: us.monoid.web
  artifactId: resty
- version: 0.1.1
+ version: 0.2.0
 
 Compile it yourself
 -------------------
@@ -54,6 +90,8 @@ Use Maven 2 or 3 to build.
 
 Examples
 -----------
+
+See http://beders.github.com/Resty/Resty/Overview.html 
 
 *Getting location information from the geonames web service, published as JSON*::
 
@@ -110,6 +148,11 @@ Developers
 ===========
 
 - Jochen Bedersdorfer (resty@bedersdorfer.de)
+
+Contributors
+============
+Gabriel Falkenberg <gabriel.falkenberg@gmail.com>
+Remi Alvergnat <remi.alvergnat@gmail.com>
 
 
  

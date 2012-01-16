@@ -3,12 +3,18 @@
  */
 package us.monoid.web.server;
 
+import java.net.URI;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
@@ -59,8 +65,8 @@ public class MimeTestResource {
 	
 	@Path("/put")
 	@PUT
-	public String putty(String o) {
-		return o;
+	public Response putty(String o) {
+		return Response.created(URI.create("http://localhost:9998/mime/text")).entity(o).build();
 	}
 	
 	@Path("/delete")

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static us.monoid.web.Resty.*;
 
 import java.io.IOException;
+import java.net.URI;
 
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
@@ -47,7 +48,7 @@ public class RestyMimeTest {
 		String result = r.text(uri, content("bubu")).toString();
 		System.out.println(result);
 	}
-	
+
 	@Test
 	public void testSubmitPut() throws IOException {
 		Resty r = new Resty();
@@ -55,6 +56,17 @@ public class RestyMimeTest {
 		System.out.println("Put to:" + uri);
 		String result = r.text(uri, put(content("bubu"))).toString();
 		System.out.println(result);
+	}
+	
+	@Test
+	public void testPutLocation() throws IOException {
+		Resty r = new Resty();
+		String uri = ts.getBaseUri() + "mime/put";
+		System.out.println("Put to:" + uri);
+		URI loc = r.text(uri, put(content("bubu"))).location();
+		System.out.println("Location of new resource:" + loc);
+		assertNotNull(loc);
+		
 	}
 
 	@Test

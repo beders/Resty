@@ -6,6 +6,9 @@ package us.monoid.web;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.net.URLConnection;
 
 /**
@@ -62,4 +65,14 @@ public abstract class AbstractResource extends Resty {
 			return false;
 	}
 
+	/** Get the location header as URI. Returns null if there is no location header.
+	 * 
+	 */
+	public URI location() {
+		String loc = http().getHeaderField("Location");
+		if (loc != null) {
+				return URI.create(loc);
+		}
+		return null;
+	}
 }

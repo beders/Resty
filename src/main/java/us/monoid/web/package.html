@@ -1,25 +1,11 @@
 <html>
 <body>
 <h1>
-Welcome to Resty
+Welcome to Resty! This is the main package of Resty. Look at me!!! Look at me!!!
 </h1>
 This is the main package for Resty, a simple HTTP/REST client.
 
-To get started, check out the Javadoc of the Resty class.
-Here is a typical usage pattern:
+To get started, check out the Javadoc of the <a href="Resty.html">Resty </a>class.
 
-<pre>
-import static us.monoid.web.Resty.*;
-import us.monoid.web.Resty;
-
-...
-Resty r = new Resty();
-// r.authenticate(...,..,..);
-
-// Look up postal code 66780 in Germany and extract the name of the place from the JSON.
-String cityName = r.json("http://ws.geonames.org/postalCodeLookupJSON?postalcode=66780&country=DE").
-	get("postalcodes[0].placeName").toString(); 
-...
-</pre>
 </body>
 </html>
