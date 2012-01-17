@@ -32,6 +32,7 @@ DELETE a resource via URL expecting JSON back:
 
   new Resty().json(url, delete());
 
+
 Here is an example on how to use the geonames web service. It retrieves the JSON object (see json.org for details) and gets the name of a place from the zip code::
   
  	Resty r = new Resty();
