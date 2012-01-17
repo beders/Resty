@@ -54,9 +54,11 @@ Changes
 -------
 
 Since 0.2.0: 
+
 - Support for PUT, DELETE, Support for application/multipart-formdata
 
 Since 0.3.0: 
+
 - Option to ignore SSL certificate errors: Resty.ignoreAllCerts (global switch for now)
 - New constructor to specify options: new Resty(Option.timeout(3000)); (sets the socket connect timeout)
 - Create your own Options (see Resty.Option.Timeout or Resty.Option.Proxy for example)
