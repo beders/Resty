@@ -21,16 +21,15 @@ GETting an URL (as JSON):
 
 POSTing to an URL (using multipart/form-data) and expecting JSON back:
 
-  new Resty().json(url, form(data("name", "Don Draper"), data("occupation", "Ad Man")));
-
+	new Resty().json(url, form(data("name", "Don Draper"), data("occupation", "Ad Man")));
+	
 PUTting content and expecting JSON back:
 
-
-  new Resty().json(url, put(content(someJSON)));
+	new Resty().json(url, put(content(someJSON)));
  
 DELETE a resource via URL expecting JSON back:
 
-  new Resty().json(url, delete());
+ 	new Resty().json(url, delete());
 
 
 Here is an example on how to use the geonames web service. It retrieves the JSON object (see json.org for details) and gets the name of a place from the zip code::
