@@ -4,10 +4,54 @@
 .style_1 {
     padding: 0px;
 }
+.paragraph_style {
+    color: rgb(0, 0, 0);
+    font-family: 'CourierNewPS-BoldMT', 'Courier New', monospace;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 14px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    opacity: 1.00;
+    padding-bottom: 12px;
+    padding-top: 0px;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0px;
+    text-transform: none;
+}
+.paragraph_style_1 {
+    color: rgb(0, 0, 0);
+    font-family: 'CourierNewPS-BoldMT', 'Courier New', monospace;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 14px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    opacity: 1.00;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0px;
+    text-transform: none;
+}
 .style_2 {
     padding: 10px;
 }
-.paragraph_style {
+.paragraph_style_2 {
     color: rgb(81, 81, 81);
     font-family: 'HelveticaNeue-Bold', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 12px;
@@ -29,7 +73,7 @@
     text-indent: 0px;
     text-transform: none;
 }
-.paragraph_style_1 {
+.paragraph_style_3 {
     color: rgb(81, 81, 81);
     font-family: 'HelveticaNeue', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 12px;
@@ -51,7 +95,7 @@
     text-indent: 0px;
     text-transform: none;
 }
-.paragraph_style_2 {
+.paragraph_style_4 {
     color: rgb(81, 81, 81);
     font-family: 'HelveticaNeue-Italic', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 12px;
@@ -73,7 +117,7 @@
     text-indent: 0px;
     text-transform: none;
 }
-.paragraph_style_3 {
+.paragraph_style_5 {
     color: rgb(81, 81, 81);
     font-family: 'HelveticaNeue', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 12px;
@@ -95,6 +139,31 @@
     text-indent: 0px;
     text-transform: none;
 }
+.paragraph_style_6 {
+    color: rgb(0, 0, 0);
+    font-family: 'HelveticaNeue', 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    opacity: 1.00;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0px;
+    text-transform: none;
+}
+.style_External_168_227 {
+    position: relative;
+}
 .style_3 {
     font-family: 'HelveticaNeue-Bold', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 12px;
@@ -103,18 +172,15 @@
     font-weight: 700;
     line-height: 18px;
 }
-.style_External_168_170 {
-    position: relative;
-}
-.style_SkipStroke_1 {
-    background: transparent;
-    opacity: 1.00;
-}
 .style_SkipStroke_2 {
     background: transparent;
     opacity: 1.00;
 }
 .style_SkipStroke {
+    background: transparent;
+    opacity: 1.00;
+}
+.style_SkipStroke_1 {
     background: transparent;
     opacity: 1.00;
 }
@@ -130,15 +196,19 @@
     background: transparent;
     opacity: 1.00;
 }
+.style_SkipStroke_6 {
+    background: transparent;
+    opacity: 1.00;
+}
+.style_External_400_519 {
+    bottom: 0px;
+    position: relative;
+    width: 400px;
+}
 .style_External_515_43 {
     bottom: 0px;
     position: absolute;
     width: 515px;
-}
-.style_External_400_184 {
-    bottom: 0px;
-    position: relative;
-    width: 400px;
 }
 .Body {
     color: rgb(81, 81, 81);
@@ -219,7 +289,7 @@
     position: absolute;
     width: 400px;
 }
-.Normal_External_400_184 {
+.Normal_External_400_519 {
     bottom: 0px;
     position: absolute;
     width: 400px;
@@ -280,22 +350,20 @@
     background: transparent;
     opacity: 1.00;
 }
+.graphic_image_style_default_SkipStroke {
+    background: transparent;
+    opacity: 1.00;
+}
 .graphic_textbox_layout_style_default {
     padding: 4px;
 }
-.graphic_textbox_layout_style_default_External_100_100 {
+.graphic_textbox_layout_style_default_External_168_227 {
     position: relative;
 }
-.graphic_textbox_layout_style_default_External_393_278 {
+.graphic_textbox_layout_style_default_External_393_334 {
     position: relative;
 }
 .graphic_textbox_layout_style_default_External_186_253 {
-    position: relative;
-}
-.graphic_textbox_layout_style_default_External_92_92 {
-    position: relative;
-}
-.graphic_textbox_layout_style_default_External_168_170 {
     position: relative;
 }
 .graphic_textbox_style_default_SkipStroke {
@@ -326,34 +394,6 @@ ol  {
           text-transform:none ;
           border: none;          
         }
-#widget1 a:visited {
-    color: rgb(66, 66, 66);
-    text-decoration: none;
-}
-#widget0 a:visited {
-    color: rgb(66, 66, 66);
-    text-decoration: none;
-}
-#widget1 a:hover {
-    color: rgb(224, 133, 102);
-    text-decoration: underline;
-}
-.spacer {
-    font-size: 1px;
-    line-height: 1px;
-}
-#widget2 a:visited {
-    color: rgb(66, 66, 66);
-    text-decoration: none;
-}
-.tinyText {
-    font-size: 1px;
-    line-height: 1px;
-}
-#widget0 a {
-    color: rgb(183, 97, 78);
-    text-decoration: none;
-}
 #widget1 a {
     color: rgb(183, 97, 78);
     text-decoration: none;
@@ -362,13 +402,29 @@ ol  {
     color: rgb(224, 133, 102);
     text-decoration: underline;
 }
-#widget2 a {
+#widget1 a:hover {
+    color: rgb(224, 133, 102);
+    text-decoration: underline;
+}
+#widget0 a:visited {
+    color: rgb(66, 66, 66);
+    text-decoration: none;
+}
+#widget0 a {
     color: rgb(183, 97, 78);
     text-decoration: none;
 }
-#widget2 a:hover {
-    color: rgb(224, 133, 102);
-    text-decoration: underline;
+#widget1 a:visited {
+    color: rgb(66, 66, 66);
+    text-decoration: none;
+}
+.spacer {
+    font-size: 1px;
+    line-height: 1px;
+}
+.tinyText {
+    font-size: 1px;
+    line-height: 1px;
 }
 .bumper {
     font-size: 1px;

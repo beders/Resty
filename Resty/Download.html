@@ -5,8 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
-    <meta name="Generator" content="iWeb 3.0.3" />
-    <meta name="iWeb-Build" content="local-build-20110327" />
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120116" />
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <meta name="viewport" content="width=900" />
     <title>Resty</title>
@@ -60,23 +60,51 @@ new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources
           <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
           <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
           <div style="margin-left: 190px; margin-top: 27px; position: relative; width: 519px; z-index: 1; " class="style_SkipStroke_1 shape-with-text flowDefining">
-            <div class="text-content style_External_519_421" style="padding: 0px; ">
+            <div class="text-content style_External_519_442" style="padding: 0px; ">
               <div class="style_1">
-                <p style="padding-top: 0pt; " class="Body">You can download the <a title="http://repo2.maven.org/maven2/us/monoid/web/resty/0.2.0/resty-0.2.0.jar" href="http://repo2.maven.org/maven2/us/monoid/web/resty/0.2.0/resty-0.2.0.jar">JAR file</a> or get your fix at the <a title="https://github.com/beders/Resty" href="https://github.com/beders/Resty">project page</a> over at Github.<br /></p>
+                <p style="padding-top: 0pt; " class="Body">You can download the <a title="http://repo2.maven.org/maven2/us/monoid/web/resty/0.3.1/resty-0.3.1.jar" href="http://repo2.maven.org/maven2/us/monoid/web/resty/0.3.1/resty-0.3.1.jar">JAR file</a> or get your fix at the <a title="https://github.com/beders/Resty" href="https://github.com/beders/Resty">project page</a> over at Github.<br /></p>
                 <p class="Body"><br /></p>
                 <p class="Body">Maven users may want to include this into their project.<br /></p>
                 <p class="Body"><br /></p>
                 <p class="Body">&lt;<span class="style_2">dependency&gt;<br /></span></p>
                 <p class="paragraph_style">    &lt;groupId&gt;us.monoid.web&lt;/groupId&gt;<br /></p>
                 <p class="paragraph_style">    &lt;artifactId&gt;resty&lt;/artifactId&gt;<br /></p>
-                <p class="paragraph_style">    &lt;version&gt;0.2.0&lt;/version&gt;<br /></p>
+                <p class="paragraph_style">    &lt;version&gt;0.3.1&lt;/version&gt;<br /></p>
                 <p class="paragraph_style">&lt;/dependency&gt;<br /></p>
                 <p class="Body"><br /></p>
                 <p class="Body">Dependencies: none, so far.<br /></p>
                 <p class="Body"><br /></p>
+                <p class="Body">New in  0.3.1: <br /></p>
+                <ol>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Option to ignore SSL certificate errors: Resty.ignoreAllCerts (global switch for now) <br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> New constructor to specify options: new Resty(Option.timeout(3000)); (sets the socket connect timeout)<br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Create your own Options (see Resty.Option.Timeout or Resty.Option.Proxy for example)<br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Fixed scala naming issue <br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Enhanced syntax for JSON queries<br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Bugfixes from my contributors. Thank you!<br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Proxy support. Thank you, Gabriel. r.setProxy(...) for object r or new Resty(Option.proxy(...)) to carry proxy settings over when traversing paths<br /></p>
+                  </li>
+                  <li style="line-height: 17px; padding-left: 0px; text-indent: 0px; " class="full-width">
+                    <p style="text-indent: 0px; " class="paragraph_style_1"><span style="font-size: 12px; " class="Bullet">•</span> Convenient location header: new Resty().bytes(url, put(someContent)).location(); // gets Location header as URI<br /></p>
+                  </li>
+                </ol>
+                <p class="Body"><br /></p>
                 <p class="Body">New in version 0.2.0: Support for PUT, DELETE, Support for application/multipart-formdata<br /></p>
               </div>
-              <div style="height: 213px; line-height: 213px; " class="tinyText"> </div>
+              <div style="height: 15px; line-height: 15px; " class="tinyText"> </div>
             </div>
           </div>
           
@@ -85,7 +113,7 @@ new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources
           <div id="id2" style="height: 24px; left: 193px; position: absolute; top: -1px; width: 400px; z-index: 1; " class="style_SkipStroke_2 shape-with-text">
             <div class="text-content Normal_External_400_24" style="padding: 0px; ">
               <div class="Normal">
-                <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Title">Version 0.2.0</p>
+                <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Title">Version 0.3.1</p>
               </div>
             </div>
           </div>
@@ -99,58 +127,11 @@ new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources
                 <p class="Quote"><a title="API_Docs.html" href="API_Docs.html">API Doc</a><br /></p>
                 <p class="Quote"><a title="" href="">Download</a><br /></p>
                 <p class="Quote"><a title="https://github.com/beders/Resty" href="https://github.com/beders/Resty">Sources</a><br /></p>
-                <p class="Quote"><a title="mailto:resty@bedersdorfer.de?subject=About this Resty thingie..." href="mailto:resty@bedersdorfer.de?subject=About%20this%20Resty%20thingie...">Feedback</a><br /></p>
-                <p style="padding-bottom: 0pt; " class="Quote"><a title="Forum.html" href="Forum.html">Forum</a></p>
+                <p style="padding-bottom: 0pt; " class="Quote"><a title="mailto:resty@bedersdorfer.de?subject=About this Resty thingie..." href="mailto:resty@bedersdorfer.de?subject=About%20this%20Resty%20thingie...">Feedback</a></p>
               </div>
             </div>
           </div>
-          
-
-
-          <div id="id4" style="height: 100px; left: 400px; position: absolute; top: 189px; width: 100px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
-            <div class="text-content graphic_textbox_layout_style_default_External_100_100" style="padding: 0px; ">
-              <div class="graphic_textbox_layout_style_default"></div>
-            </div>
-          </div>
-          
-
-
-          <div id="id5" style="height: 100px; left: 410px; position: absolute; top: 199px; width: 100px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
-            <div class="text-content graphic_textbox_layout_style_default_External_100_100" style="padding: 0px; ">
-              <div class="graphic_textbox_layout_style_default"></div>
-            </div>
-          </div>
-          
-
-
-          <div id="id6" style="height: 100px; left: 420px; position: absolute; top: 209px; width: 100px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
-            <div class="text-content graphic_textbox_layout_style_default_External_100_100" style="padding: 0px; ">
-              <div class="graphic_textbox_layout_style_default"></div>
-            </div>
-          </div>
-          
-
-
-          <div id="id8" style="height: 100px; left: 430px; position: absolute; top: 219px; width: 100px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
-            <div class="text-content graphic_textbox_layout_style_default_External_100_100" style="padding: 0px; ">
-              <div class="graphic_textbox_layout_style_default">
-                <div class="paragraph Free_Form" style="padding-bottom: 0pt; padding-top: 0pt; "><div id="id7" style="height: 92px; position: relative; width: 92px; " class="style_SkipStroke_4 shape-with-text inline-block"><div class="text-content graphic_textbox_layout_style_default_External_92_92" style="padding: 0px; "><div class="graphic_textbox_layout_style_default"></div></div></div></div>
-              </div>
-              <div style="clear: both; height: 0px; line-height: 0px; " class="tinyText"> </div>
-            </div>
-          </div>
-          
-
-
-          <div id="id10" style="height: 100px; left: 440px; position: absolute; top: 229px; width: 100px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
-            <div class="text-content graphic_textbox_layout_style_default_External_100_100" style="padding: 0px; ">
-              <div class="graphic_textbox_layout_style_default">
-                <div class="paragraph Free_Form" style="padding-bottom: 0pt; padding-top: 0pt; "><div id="id9" style="height: 92px; position: relative; width: 92px; " class="style_SkipStroke_4 shape-with-text inline-block"><div class="text-content graphic_textbox_layout_style_default_External_92_92" style="padding: 0px; "><div class="graphic_textbox_layout_style_default"></div></div></div></div>
-              </div>
-              <div style="clear: both; height: 0px; line-height: 0px; " class="tinyText"> </div>
-            </div>
-          </div>
-          <div style="height: 101px; line-height: 101px; " class="spacer"> </div>
+          <div style="height: 80px; line-height: 80px; " class="spacer"> </div>
         </div>
         <div style="height: 75px; margin-left: 0px; position: relative; width: 900px; z-index: 15; " id="footer_layer">
           <div style="height: 0px; line-height: 0px; " class="bumper"> </div>

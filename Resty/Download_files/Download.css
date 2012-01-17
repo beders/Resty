@@ -36,6 +36,32 @@
     text-indent: 0px;
     text-transform: none;
 }
+.paragraph_style_1 {
+    color: rgb(81, 81, 81);
+    font-family: 'HelveticaNeue', 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    opacity: 1.00;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: left;
+    text-decoration: none;
+    text-indent: 0px;
+    text-transform: none;
+}
+.style_SkipStroke {
+    background: transparent;
+    opacity: 1.00;
+}
 .style_SkipStroke_1 {
     background: transparent;
     opacity: 1.00;
@@ -44,30 +70,22 @@
     background: transparent;
     opacity: 1.00;
 }
-.style_SkipStroke {
-    background: transparent;
-    opacity: 1.00;
+.style_External_519_442 {
+    bottom: 0px;
+    position: relative;
+    width: 519px;
 }
 .style_3 {
     padding: 10px;
-}
-.style_SkipStroke_3 {
-    background: rgb(192, 192, 192);
-    opacity: 1.00;
 }
 .style_External_515_43 {
     bottom: 0px;
     position: absolute;
     width: 515px;
 }
-.style_SkipStroke_4 {
-    background: transparent;
+.style_SkipStroke_3 {
+    background: rgb(192, 192, 192);
     opacity: 1.00;
-}
-.style_External_519_421 {
-    bottom: 0px;
-    position: relative;
-    width: 519px;
 }
 .style_External_168_170 {
     position: relative;
@@ -146,15 +164,15 @@
     position: absolute;
     width: 400px;
 }
-.Normal_External_519_421 {
-    bottom: 0px;
-    position: absolute;
-    width: 519px;
-}
 .Normal_External_515_43 {
     bottom: 0px;
     position: absolute;
     width: 515px;
+}
+.Normal_External_519_442 {
+    bottom: 0px;
+    position: absolute;
+    width: 519px;
 }
 .Quote {
     color: rgb(183, 97, 78);
@@ -215,13 +233,7 @@
 .graphic_textbox_layout_style_default {
     padding: 4px;
 }
-.graphic_textbox_layout_style_default_External_100_100 {
-    position: relative;
-}
 .graphic_textbox_layout_style_default_External_168_170 {
-    position: relative;
-}
-.graphic_textbox_layout_style_default_External_92_92 {
     position: relative;
 }
 .graphic_textbox_style_default_SkipStroke {
@@ -240,6 +252,18 @@ a:hover {
     color: rgb(224, 133, 102);
     text-decoration: underline;
 }
+ol  { 
+      padding:0;
+      margin:0;
+      text-indent:0;
+      list-style-type:none ;
+      list-style-image:none
+    }
+.Bullet { 
+          text-decoration:none ;
+          text-transform:none ;
+          border: none;          
+        }
 .bumper {
     font-size: 1px;
     line-height: 1px;
