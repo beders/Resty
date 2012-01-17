@@ -36,7 +36,8 @@ public class JSONPathQuery extends PathQuery<JSONResource, Object> {
 	@Override
 	Object eval(JSONResource resource) throws JSONException, ParseException, IOException {
 		JSONObject json = resource.object();
-		Object result = getCompiler().expr().eval(json);
+		System.out.println("GOT:" + json);
+		Object result = getCompiler().json().eval(json);
 		return result;
 	}
 
@@ -45,5 +46,19 @@ public class JSONPathQuery extends PathQuery<JSONResource, Object> {
 			compiler = new JSONPathCompiler(new StringReader(expr));
 		}
 		return compiler;
+	}
+	
+	@Override
+	public String toString() {
+		JSONPathCompiler.JSONPathExpr x;
+		try {
+			x = JSONPathCompiler.JSONPathExpr.class.cast(getCompiler().json());
+			x.dump(" ");
+			return x.toString();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "Could not parse!";
 	}
 }

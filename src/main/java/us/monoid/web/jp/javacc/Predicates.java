@@ -21,6 +21,11 @@ public class Predicates {
 			ops = anOperator.charAt(0);
 			rhs = aValue;
 		}
+		
+		@Override
+		public String toString() {
+			return "" + lhs + " " + ops + " " + rhs;
+		}
 
 		public boolean test(JSONObject json) throws JSONException {
 			Object eval = lhs.eval(json);

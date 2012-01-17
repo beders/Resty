@@ -28,6 +28,25 @@ import us.monoid.web.jp.javacc.JSONPathCompiler.JSONPathExpr;
  */
 public class JSONPathCompilerTest {
 	
+	
+	@Test
+	public void testRepeat() throws Exception {
+		for (int i = 0; i < 10; i++) {
+			System.out.println("RUN      " + i);
+			testGeo();
+		}
+	}
+	
+	protected void testGeo() throws Exception {
+		System.out.println(this.getClass().getResource("geo.json"));
+		JSONObject json = read(this.getClass().getResource("geo.json"));
+		System.out.println(json);
+    JSONPathExpr evaluator = parse("results[address_components.short_name='U.S. 101'].formatted_address");
+    Object result = evaluator.eval(json);
+    System.out.println(result);
+    assertTrue(result.toString().contains("Golden Gate Bridge"));
+	}
+
 	@Test
 	public void testSimplePath() throws Exception {
 		System.out.println(this.getClass().getResource("books.json"));

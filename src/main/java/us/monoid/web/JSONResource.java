@@ -110,6 +110,8 @@ public class JSONResource extends AbstractResource {
 	
 	/** Gets the partial JSON object or attribute as specified in the path expression.*/
 	public Object get(String path) throws Exception {
+		System.out.println("DEBUG:" + new JSONPathQuery(path));
+		System.out.println("DEBUG:"+ object());
 		return new JSONPathQuery(path).eval(this);
 	}
 	

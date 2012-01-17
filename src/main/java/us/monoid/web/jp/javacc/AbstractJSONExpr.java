@@ -88,4 +88,8 @@ public abstract class AbstractJSONExpr extends SimpleNode implements JSONPathCom
 
 	abstract Object eval(Object o) throws JSONException;
 
+	@Override
+	public String toString() {
+		return super.toString() + " " + (value == null ? "" : value);
+	}
 }
