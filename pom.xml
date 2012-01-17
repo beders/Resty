@@ -3,7 +3,7 @@
   <groupId>us.monoid.web</groupId>
   <artifactId>resty</artifactId>
   <packaging>jar</packaging>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <name>Resty</name>
   <description>Simple Java client to talk to RESTful backends</description>
   <url>http://github.com/beders/resty</url>
