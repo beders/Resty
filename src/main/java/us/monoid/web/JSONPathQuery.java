@@ -47,18 +47,5 @@ public class JSONPathQuery extends PathQuery<JSONResource, Object> {
 		}
 		return compiler;
 	}
-	
-	@Override
-	public String toString() {
-		JSONPathCompiler.JSONPathExpr x;
-		try {
-			x = JSONPathCompiler.JSONPathExpr.class.cast(getCompiler().json());
-			x.dump(" ");
-			return x.toString();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "Could not parse!";
-	}
+
 }
