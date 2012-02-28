@@ -139,6 +139,7 @@ public class Resty {
 	}
 
 	/**
+	 * 
 	 * @see Resty#authenticate(URI, String, char[])
 	 * 
 	 * @param string
@@ -147,6 +148,18 @@ public class Resty {
 	 */
 	public void authenticate(String string, String aLogin, char[] charArray) {
 		authenticate(URI.create(string), aLogin, charArray);
+	}
+	
+	/**
+	 * Register a login password for the realm returned by the authorization challenge.
+	 * Use this method instead of authenticate in case the URL is not made available to the java.net.Authenticator class
+	 * 
+	 * @param realm the realm (see rfc2617, section 1.2) 
+	 * @param aLogin
+	 * @param charArray
+	 */
+	public void authenticateForRealm(String realm, String aLogin, char[] charArray) {
+		rath.addRealm(realm, aLogin, charArray);
 	}
 
 	/**
