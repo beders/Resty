@@ -6,9 +6,7 @@ package us.monoid.web;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLConnection;
 
 /**
@@ -31,7 +29,23 @@ public abstract class AbstractResource extends Resty {
 	
 	void fill(URLConnection anUrlConnection) throws IOException {
 		urlConnection = anUrlConnection;
-		inputStream = anUrlConnection.getInputStream();
+		try{
+			inputStream = anUrlConnection.getInputStream();
+		} catch (IOException e){
+			// Per http://docs.oracle.com/javase/1.5.0/docs/guide/net/http-keepalive.html
+			// (comparable documentation exists for later java versions)
+			// if an HttpURLConnection was used clear the errorStream and close it
+			// so that keep alive can keep doing its work
+			if(anUrlConnection instanceof HttpURLConnection){
+				InputStream es = ((HttpURLConnection)anUrlConnection).getErrorStream();
+				// read the response body
+				byte[] buf = new byte[1024];
+				while (es.read(buf) > 0);
+				// close the errorstream
+				es.close();
+			}
+			throw e;
+		}
 	}
 
 	public URLConnection getUrlConnection() {
