@@ -44,6 +44,7 @@ public class BinaryResource extends AbstractResource {
 			bos.write(buffer, 0, len);
 		}
 		bos.close();
+		inputStream.close();
 		return aFileName;
 	}
 

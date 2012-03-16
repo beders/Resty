@@ -53,6 +53,7 @@ public class XMLResource extends TextResource {
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
 			}
+			inputStream.close();
 		}
 		return document;
 	}
