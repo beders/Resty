@@ -32,6 +32,9 @@ public class TextResource extends AbstractResource {
 	public String toString() {
 		if (text == null && inputStream != null) {
 			text = readTextFromStream(inputStream);
+			try {
+				inputStream.close();
+			} catch (IOException e) {/* Intentionally left empty */}
 		}
 		return text;
 	}

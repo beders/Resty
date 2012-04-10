@@ -47,6 +47,7 @@ public class JSONResource extends AbstractResource {
 	/** Transforming the JSON on the fly */
 	protected JSONObject unmarshal() throws IOException, JSONException {
 		JSONObject json = new JSONObject(new JSONTokener(new InputStreamReader(inputStream, "UTF-8")));
+		inputStream.close();
 		return json;
 	}
 
