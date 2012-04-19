@@ -10,7 +10,7 @@ import java.net.*;
  * Abstract base class for all resource handlers you want to use with Resty.
  * 
  * It gives access to the underlying URLConnection and the current inputStream
- *
+ * 
  * @author beders
  * 
  */
@@ -23,35 +23,33 @@ public abstract class AbstractResource extends Resty {
 	}
 
 	abstract String getAcceptedTypes();
-	
+
 	void fill(URLConnection anUrlConnection) throws IOException {
 		urlConnection = anUrlConnection;
-		try{
+		try {
 			inputStream = anUrlConnection.getInputStream();
-		} catch (IOException e){
+		} catch (IOException e) {
 			// Per http://docs.oracle.com/javase/1.5.0/docs/guide/net/http-keepalive.html
 			// (comparable documentation exists for later java versions)
 			// if an HttpURLConnection was used clear the errorStream and close it
 			// so that keep alive can keep doing its work
-			if(anUrlConnection instanceof HttpURLConnection){
-				HttpURLConnection conn = (HttpURLConnection)anUrlConnection;
+			if (anUrlConnection instanceof HttpURLConnection) {
+				HttpURLConnection conn = (HttpURLConnection) anUrlConnection;
 				InputStream es = new BufferedInputStream(conn.getErrorStream());
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
 				// read the response body
-				int read;
-				while ((read = es.read()) != -1) {
-					baos.write(read);
+				byte[] buf = new byte[1024];
+				int read = -1;
+				while ((read = es.read(buf)) > 0) {
+					baos.write(buf, 0, read);
 				}
 
 				// close the errorstream
 				es.close();
 
-				throw new IOException(
-					"Error while reading from " + conn.getRequestMethod()  + ": [" + conn.getResponseCode() + "] " + 
-					conn.getResponseMessage() + "\n" + new String(baos.toByteArray(), "UTF-8"), e
-				);
+				throw new IOException("Error while reading from " + conn.getRequestMethod() + ": [" + conn.getResponseCode() + "] "
+						+ conn.getResponseMessage() + "\n" + new String(baos.toByteArray(), "UTF-8"), e);
 			} else {
 				throw e;
 			}
@@ -63,13 +61,13 @@ public abstract class AbstractResource extends Resty {
 	}
 
 	public HttpURLConnection http() {
-		return (HttpURLConnection)urlConnection;
+		return (HttpURLConnection) urlConnection;
 	}
 
 	public InputStream stream() {
 		return inputStream;
 	}
-	
+
 	/**
 	 * Check if the URLConnection has returned the specified responseCode
 	 * 
@@ -89,13 +87,14 @@ public abstract class AbstractResource extends Resty {
 			return false;
 	}
 
-	/** Get the location header as URI. Returns null if there is no location header.
+	/**
+	 * Get the location header as URI. Returns null if there is no location header.
 	 * 
 	 */
 	public URI location() {
 		String loc = http().getHeaderField("Location");
 		if (loc != null) {
-				return URI.create(loc);
+			return URI.create(loc);
 		}
 		return null;
 	}

@@ -12,7 +12,7 @@ import us.monoid.util.EncoderUtil.Usage;
 
 /**
  * Abstract base class of the content being sent to a server.
- * 
+ * Check Resty.content(...) methods to create objects
  * @author beders
  *
  */

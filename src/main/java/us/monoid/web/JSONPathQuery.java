@@ -2,6 +2,7 @@ package us.monoid.web;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.logging.Logger;
 
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
@@ -28,6 +29,7 @@ import us.monoid.web.jp.javacc.ParseException;
 public class JSONPathQuery extends PathQuery<JSONResource, Object> {
 	private JSONPathCompiler compiler;
 	private String expr;
+	static private Logger log = Logger.getLogger(JSONPathQuery.class.getName());
 	
 	public JSONPathQuery(String anExpression) {
 		expr = anExpression;
@@ -36,7 +38,7 @@ public class JSONPathQuery extends PathQuery<JSONResource, Object> {
 	@Override
 	Object eval(JSONResource resource) throws JSONException, ParseException, IOException {
 		JSONObject json = resource.object();
-		System.out.println("GOT:" + json);
+		log.fine("JSON Received:" + json);
 		Object result = getCompiler().json().eval(json);
 		return result;
 	}

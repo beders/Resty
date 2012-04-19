@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -65,6 +66,9 @@ import us.monoid.web.mime.MultipartContent;
  * </code>
  * </pre>
  * 
+ * The return value is a resource with the data you requested AND a new Resty instance with the same set of options you initialized Resty with.
+ * 
+ * 
  * Resty supports complex path queries to navigate into a json object. This is mainly used for extracting URIs to surf along a series of REST resources for web services following the HATEOS paradigm.
  * 
  * Resty objects are not re-entrant.
@@ -82,12 +86,10 @@ public class Resty {
 	protected static String DEFAULT_USER_AGENT = "Resty/0.1 (Java)";
 	static RestyAuthenticator rath = new RestyAuthenticator();
 	static {
-		// set up content handlers. note: this is not ideal as it might conflict
-		// with existing content factories
-		// got rid of it: System.setProperty("java.content.handler.pkgs",
-		// "us.monoid.web.content.handler");
 		try {
-			CookieHandler.setDefault(new CookieManager());
+			if (CookieHandler.getDefault() == null) {
+				CookieHandler.setDefault(new CookieManager());  // TODO: get rid of this for 0.4 release
+			}
 		} catch (NoClassDefFoundError oops) {
 			System.err.println("No CookieHandler. Running on GAE? Fine. No cookie support for you!");
 		}
@@ -101,7 +103,7 @@ public class Resty {
 
 	/**
 	 * Create an instance of Resty with the following list of options.
-	 * Also, options are carried over to resources created by calls to json/text/binary etc.
+	 * <b>Also, options are carried over to resources created by calls to json/text/binary etc.</b>
 	 * Use {@link #setOptions(Option...)} to change options afterwards.
 	 * 
 	 */
@@ -502,7 +504,7 @@ public class Resty {
 	public static Content content(byte[] bytes) {
 		return new Content("application/octet-stream", bytes);
 	}
-
+	
 	/**
 	 * Create form content as application/x-www-form-urlencoded (i.e. a=b&c=d&...)
 	 * 
@@ -586,6 +588,7 @@ public class Resty {
 	 * Tell Resty to send the specified header with each request done on this instance. These headers will also be sent from any resource object returned by this instance. I.e. chained calls will carry
 	 * over the headers r.json(url).json(get("some.path.to.a.url")); Multiple headers of the same type are not supported (yet).
 	 * 
+	 * @deprecated
 	 * @param aHeader
 	 *          the header to send
 	 * @param aValue
@@ -595,6 +598,19 @@ public class Resty {
 		getAdditionalHeaders().put(aHeader, aValue);
 	}
 
+	/**
+	 * Tell Resty to send the specified header with each request done on this instance. These headers will also be sent from any resource object returned by this instance. I.e. chained calls will carry
+	 * over the headers r.json(url).json(get("some.path.to.a.url")); Multiple headers of the same type are not supported (yet).
+	 * 
+	 * @param aHeader
+	 *          the header to send
+	 * @param aValue
+	 *          the value
+	 */
+	public void withHeader(String aHeader, String aValue) {
+		getAdditionalHeaders().put(aHeader, aValue);
+	}
+	
 	/**
 	 * Don't send a header that was formely added in the alwaysSend method.
 	 * 

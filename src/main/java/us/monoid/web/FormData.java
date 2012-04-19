@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLConnection;
 
-import us.monoid.util.EncoderUtil;
-import us.monoid.util.EncoderUtil.Usage;
-
 /**
  * Wrapper for content to be sent as form-data.
  * It adds a specific content-disposition header.

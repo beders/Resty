@@ -1,10 +1,13 @@
 Changes
 -------
 
-In Development:
+New in 0.3.2:
 
+- fix for open input streams
+- support for arrays being returned as JSON
 - support for security realms (Resty.authenticateForRealm()) in case the regular authentication is not working because java is not able to determine the URL
-
+- deprecated alwaysSend in favor of withHeader
+- Resty will not set a CookieHandler if one is already set. 
 
 Since 0.3.0: 
 
@@ -20,3 +23,4 @@ Since 0.3.0:
 Since 0.2.0: 
 
 - Support for PUT, DELETE, Support for application/multipart-formdata
+

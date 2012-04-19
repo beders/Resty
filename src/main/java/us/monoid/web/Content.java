@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.net.URLConnection;
 
 /**
- * Class to encapsulate content being sent as payload of a POST request.
+ * Class to encapsulate content being sent as payload of a POST or PUT request.
  * You can use Resty.content(...) to create content objects. 
  * 
  * 
