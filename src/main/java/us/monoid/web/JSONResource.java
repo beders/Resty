@@ -6,21 +6,34 @@ import java.net.URI;
 
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
+import us.monoid.json.JSONArray;
 import us.monoid.json.JSONTokener;
 
 
 /** A resource presentation in JSON format.
- * You can  ask Resty to parse the JSON into a JSONObject, which is similar to the org.json.JSONObject and allows full access to the JSON.
+ * You can  ask Resty to parse the JSON into a JSONArray or a JSONObject. The JSONObject is similar to org.json.JSONObject 
+ * and allows full access to the JSON.
  * You can also access the JSON with a JSONPathQuery to extract only the parts you are interested in.
+ * <p />
  * @author beders
- *
+ * @author RobertFischer
  */
 public class JSONResource extends AbstractResource {
-	JSONObject json;
+
+	Object json;
 	
 	public JSONResource(Option... options) {
 		super(options);
 	}
+
+	/**
+	* Parse and return JSON array. Parsing is done only once after which the inputStream is at EOF.
+	*/
+	public JSONArray array() throws IOException, JSONException {
+		if(json == null) unmarshal();
+		return (JSONArray)json;
+	}
+
 	/** 
 	 * Parse and return JSON object. Parsing is done only once after which the inputStrem is at EOF.
 	 * @return the JSON object
@@ -28,10 +41,8 @@ public class JSONResource extends AbstractResource {
 	 * @throws JSONException
 	 */
 	public JSONObject object() throws IOException, JSONException {
-		if (json == null) {
-			json = unmarshal();
-		}
-		return json;
+		if (json == null) unmarshal();
+		return (JSONObject)json;
 	}
 	
 	/** Added for compatibility with Scala. See Issue #2 at github.
@@ -45,8 +56,8 @@ public class JSONResource extends AbstractResource {
 	}
 	
 	/** Transforming the JSON on the fly */
-	protected JSONObject unmarshal() throws IOException, JSONException {
-		JSONObject json = new JSONObject(new JSONTokener(new InputStreamReader(inputStream, "UTF-8")));
+	protected Object unmarshal() throws IOException, JSONException {
+		json = new JSONTokener(new InputStreamReader(inputStream, "UTF-8")).nextValue();
 		inputStream.close();
 		return json;
 	}
