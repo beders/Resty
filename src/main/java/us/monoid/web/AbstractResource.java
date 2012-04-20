@@ -3,11 +3,8 @@
  */
 package us.monoid.web;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URLConnection;
+import java.io.*;
+import java.net.*;
 
 /**
  * Abstract base class for all resource handlers you want to use with Resty.
@@ -37,14 +34,27 @@ public abstract class AbstractResource extends Resty {
 			// if an HttpURLConnection was used clear the errorStream and close it
 			// so that keep alive can keep doing its work
 			if(anUrlConnection instanceof HttpURLConnection){
-				InputStream es = ((HttpURLConnection)anUrlConnection).getErrorStream();
+				HttpURLConnection conn = (HttpURLConnection)anUrlConnection;
+				InputStream es = new BufferedInputStream(conn.getErrorStream());
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
 				// read the response body
-				byte[] buf = new byte[1024];
-				while (es.read(buf) > 0);
+				int read;
+				while ((read = es.read()) != -1) {
+					baos.write(read);
+				}
+
 				// close the errorstream
 				es.close();
+
+				throw new IOException(
+					"Error while reading from " + conn.getRequestMethod()  + ": [" + conn.getResponseCode() + "] " + 
+					conn.getResponseMessage() + "\n" + new String(baos.toByteArray(), "UTF-8"), e
+				);
+			} else {
+				throw e;
 			}
-			throw e;
 		}
 	}
 
