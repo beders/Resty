@@ -3,6 +3,7 @@ Changes
 
 New in 0.3.2:
 
+- revert to Maven. Gradle came in through a pull request. Not intending to move to gradle just yet
 - fix for open input streams
 - support for arrays being returned as JSON
 - support for security realms (Resty.authenticateForRealm()) in case the regular authentication is not working because java is not able to determine the URL
