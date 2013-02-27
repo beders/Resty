@@ -5,6 +5,9 @@ package us.monoid.web;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Abstract base class for all resource handlers you want to use with Resty.
@@ -15,6 +18,7 @@ import java.net.*;
  * 
  */
 public abstract class AbstractResource extends Resty {
+	static final Logger log = Logger.getLogger(AbstractResource.class.getName()); 
 	protected URLConnection urlConnection;
 	protected InputStream inputStream;
 
@@ -22,7 +26,7 @@ public abstract class AbstractResource extends Resty {
 		super(options);
 	}
 
-	abstract String getAcceptedTypes();
+	protected abstract String getAcceptedTypes();
 
 	void fill(URLConnection anUrlConnection) throws IOException {
 		urlConnection = anUrlConnection;
@@ -38,11 +42,15 @@ public abstract class AbstractResource extends Resty {
 				InputStream es = new BufferedInputStream(conn.getErrorStream());
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				// read the response body
-				byte[] buf = new byte[1024];
-				int read = -1;
-				while ((read = es.read(buf)) > 0) {
-					baos.write(buf, 0, read);
+				try {
+					// read the response body
+					byte[] buf = new byte[1024];
+					int read = -1;
+					while ((read = es.read(buf)) > 0) {
+						baos.write(buf, 0, read);
+					}
+				} catch (IOException e1) {
+					log.warning("IOException when reading the error stream. Igored");
 				}
 
 				// close the errorstream
@@ -97,5 +105,23 @@ public abstract class AbstractResource extends Resty {
 			return URI.create(loc);
 		}
 		return null;
+	}
+
+	/** Print out the response headers for this resource.
+	 * 
+	 * @return
+	 */
+	public String printResponseHeaders() {
+		StringBuilder sb = new StringBuilder();
+		HttpURLConnection http = http();
+		if (http != null) {
+			Map<String, List<String>> header = http.getHeaderFields();
+			for (String key : header.keySet()) {
+				for (String val : header.get(key)) {
+					sb.append(key).append(": ").append(val).append("\n");
+				}
+			}
+		}
+		return sb.toString();
 	}
 }
