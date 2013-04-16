@@ -131,7 +131,7 @@ public class JSONResource extends AbstractResource {
 	}
 
 	@Override
-	String getAcceptedTypes() {
+	public String getAcceptedTypes() {
 		return "application/json";
 	}
 

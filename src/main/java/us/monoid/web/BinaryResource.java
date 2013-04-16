@@ -24,7 +24,7 @@ public class BinaryResource extends AbstractResource {
 	 * @see us.monoid.web.AbstractResource#getAcceptedTypes()
 	 */
 	@Override
-	String getAcceptedTypes() {
+	public String getAcceptedTypes() {
 		return "application/octet-stream,*/*";
 	}
 
