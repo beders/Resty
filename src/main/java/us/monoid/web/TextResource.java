@@ -88,7 +88,7 @@ public class TextResource extends AbstractResource {
 	}
 
 	@Override
-	String getAcceptedTypes() {
+	public String getAcceptedTypes() {
 		return "text/html,text/plain,text/*";
 	}
 

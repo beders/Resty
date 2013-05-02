@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Authenticator used for HTTP based authentication. This class is not used directly, but through adding credentials using a Resty instance. Also, this class is not useable for hundreds or thousands
@@ -22,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  */
 public class RestyAuthenticator extends Authenticator {
-	List<Site> sites = Collections.synchronizedList(new ArrayList<Site>());
+	List<Site> sites = new CopyOnWriteArrayList<Site>();
 	Map<String, Realm> realms = new ConcurrentHashMap<String, Realm>();
 	
 	@Override
