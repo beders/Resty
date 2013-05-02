@@ -8,7 +8,7 @@ Introduction
 Resty is a small, convenient interface to talk to RESTful services from Java.
 
 Its focus is on simplicity and ease-of-use, often requiring only two lines of code to access any web service.
-It supports chaining several requests which is very useful in RESTful application employing HATEOS.
+It supports chaining several requests which is very useful in RESTful application employing HATEOAS.
   
 Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials, then call one of the content type specific methods.
 The idea is that the method name will convey the expected content type you can then operate on.
@@ -42,7 +42,7 @@ See more examples below.
 Features
 --------
 - GET, POST, PUT, DELETE for text, XML, JSON, binary
-- Fluid-style API to follow hyperlinks easily
+- Fluent-style API to follow hyperlinks easily
 - Complex path queries for JSON (simple tests on fields with operators >,=,< and full boolean expressions (&&,||,!))
 - Support for XPath expressions
 - Authentication with login/passwd
@@ -66,7 +66,7 @@ Growing
 
 Installation
 -------------
-Either create the JAR yourself (see target directory or grab the rest-*.jar file and add it to your CLASSPATH.
+Either create the JAR yourself (see target directory or grab the rest-\*.jar file and add it to your CLASSPATH.
 Or grab it from Maven central::
  groupId: us.monoid.web
  artifactId: resty
