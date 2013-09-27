@@ -68,9 +68,12 @@ Installation
 -------------
 Either create the JAR yourself (see target directory or grab the rest-\*.jar file and add it to your CLASSPATH.
 Or grab it from Maven central::
- groupId: us.monoid.web
- artifactId: resty
- version: 0.3.2
+
+<dependency>
+    <groupId>us.monoid.web</groupId>
+    <artifactId>resty</artifactId>
+    <version>0.3.2</version>
+</dependency>
 
 Compile it yourself
 -------------------
