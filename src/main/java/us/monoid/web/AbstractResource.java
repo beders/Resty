@@ -8,6 +8,7 @@ import java.net.*;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Abstract base class for all resource handlers you want to use with Resty.
@@ -31,7 +32,12 @@ public abstract class AbstractResource extends Resty {
 	void fill(URLConnection anUrlConnection) throws IOException {
 		urlConnection = anUrlConnection;
 		try {
-			inputStream = anUrlConnection.getInputStream();
+            if ("gzip".equals(anUrlConnection.getContentEncoding())) {
+                inputStream = new GZIPInputStream(anUrlConnection.getInputStream());
+            }
+            else {
+                inputStream = anUrlConnection.getInputStream();
+            }
 		} catch (IOException e) {
 			// Per http://docs.oracle.com/javase/1.5.0/docs/guide/net/http-keepalive.html
 			// (comparable documentation exists for later java versions)
