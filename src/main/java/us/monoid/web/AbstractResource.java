@@ -45,7 +45,13 @@ public abstract class AbstractResource extends Resty {
 			// so that keep alive can keep doing its work
 			if (anUrlConnection instanceof HttpURLConnection) {
 				HttpURLConnection conn = (HttpURLConnection) anUrlConnection;
-				InputStream es = new BufferedInputStream(conn.getErrorStream());
+				InputStream es;
+				if ("gzip".equals(conn.getContentEncoding())) {
+					es = new BufferedInputStream(new GZIPInputStream(conn.getErrorStream()));
+				}
+				else {
+					es = new BufferedInputStream(conn.getErrorStream());
+				}
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				try {
