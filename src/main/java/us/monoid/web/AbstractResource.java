@@ -32,12 +32,12 @@ public abstract class AbstractResource extends Resty {
 	void fill(URLConnection anUrlConnection) throws IOException {
 		urlConnection = anUrlConnection;
 		try {
-            if ("gzip".equals(anUrlConnection.getContentEncoding())) {
-                inputStream = new GZIPInputStream(anUrlConnection.getInputStream());
-            }
-            else {
-                inputStream = anUrlConnection.getInputStream();
-            }
+			if ("gzip".equals(anUrlConnection.getContentEncoding())) {
+				inputStream = new GZIPInputStream(anUrlConnection.getInputStream());
+			}
+			else {
+				inputStream = anUrlConnection.getInputStream();
+			}
 		} catch (IOException e) {
 			// Per http://docs.oracle.com/javase/1.5.0/docs/guide/net/http-keepalive.html
 			// (comparable documentation exists for later java versions)
