@@ -1,11 +1,20 @@
 package us.monoid.web;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static us.monoid.web.Resty.*;
 
 import org.junit.Test;
 
+import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 import us.monoid.web.Resty;
+import us.monoid.web.ssl.AllowAllHostnameVerifier;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.IOException;
+import java.net.Socket;
 
 public class RestyTest {
 	
@@ -62,5 +71,14 @@ public class RestyTest {
 //		
 //	}
 
+
+    @Test
+    public void shouldSetDefaultHostnameVerifierToAllowAllHostnamesWhenIgnoreAllCertsIsSet() {
+        Resty.ignoreAllCerts();
+
+        HostnameVerifier defaultHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+
+        assertThat("Should be static AllowAllHostnameVerifier", defaultHostnameVerifier, equalTo(AllowAllHostnameVerifier.ALLOW_ALL_HOSTNAMES));
+    }
 	
 }

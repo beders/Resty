@@ -11,53 +11,48 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.xml.xpath.XPathException;
 
 import us.monoid.json.JSONObject;
 import us.monoid.web.auth.RestyAuthenticator;
 import us.monoid.web.mime.MultipartContent;
+import us.monoid.web.ssl.AllowAllHostnameVerifier;
+import us.monoid.web.ssl.TrustAllX509SocketFactory;
 
 /**
  * Main class. Use me! Use me! Resty is a small, convenient interface to talk to RESTful services.
- * 
+ *
  * Basic usage is very simple: Create a Resty instance, use authenticate methode to add credentials (optional), then call one of the content type specific methods,
- * like json(...), xml(...), text(...) or bytes(...). 
- * 
+ * like json(...), xml(...), text(...) or bytes(...).
+ *
  * The idea is that the method name
  * will convey the expected content type you can then operate on. Most static methods help you build content objects or queries with a compact syntax. Static methods like put(...) and delete() are
  * used to implement the respective HTTP methods.
- * 
+ *
  * A neat trick to save you typing is to use <pre><code>import static us.monoid.web.Resty.*;</code></pre>
  * <p>
- * 
+ *
  * GETting an URL (as JSON):
  * <pre><code>new Resty().json(url);</code></pre>
- * 
+ *
  * POSTing to an URL (using multipart/form-data) and expecting JSON back:
  * <pre><code>new Resty().json(url, form(data("name", "Don Draper"), data("occupation", "Ad Man")));</code></pre>
- * 
+ *
  * PUTting content and expecting JSON back:
  * <pre><code>
  * new Resty().json(url, put(content(someJSON)));
  * </code></pre>
- * 
+ *
  * DELETE a resource via URL expecting JSON back:
  * <pre><code>new Resty().json(url, delete());</code></pre>
  *
- * 
+ *
  * Here is an example on how to use the geonames web service. It retrieves the json object (see json.org for details) and gets the name of a place from the zip code:
- * 
+ *
  * <pre>
  * <code>
  * 	Resty r = new Resty();
@@ -65,19 +60,19 @@ import us.monoid.web.mime.MultipartContent;
  * 	assertEquals(name, "Rehlingen-Siersburg");
  * </code>
  * </pre>
- * 
+ *
  * The return value is a resource with the data you requested AND a new Resty instance with the same set of options you initialized Resty with.
- * 
- * 
+ *
+ *
  * Resty supports complex path queries to navigate into a json object. This is mainly used for extracting URIs to surf along a series of REST resources for web services following the HATEOS paradigm.
- * 
+ *
  * Resty objects are not re-entrant.
- * 
+ *
  * You can also specify options when creating a Resty instance. Well, currently there is one option to set the timeout for connections.
  * But you can also create your own options! See Resty.Option for more info.
- * 
+ *
  * @author beders
- * 
+ *
  */
 
 public class Resty {
@@ -105,14 +100,14 @@ public class Resty {
 	 * Create an instance of Resty with the following list of options.
 	 * <b>Also, options are carried over to resources created by calls to json/text/binary etc.</b>
 	 * Use {@link #setOptions(Option...)} to change options afterwards.
-	 * 
+	 *
 	 */
 	public Resty(Option... someOptions) {
 		setOptions(someOptions);
 	}
-	
+
 	/** Set options if you missed your opportunity in the c'tor or if you want to change the options.
-	 *  
+	 *
 	 * @param someOptions new set of options
 	 * @return
 	 */
@@ -128,7 +123,7 @@ public class Resty {
 	 * Register this root URI for authentication. Whenever a URL is requested that starts with this root, the credentials given are used for HTTP AUTH. Note that currently authentication information is
 	 * shared across all Resty instances. This is due to the shortcomings of the java.net authentication mechanism. This might change should Resty adopt HttpClient and is the reason why this method is
 	 * not a static one.
-	 * 
+	 *
 	 * @param aSite
 	 *          the root URI of the site
 	 * @param aLogin
@@ -141,9 +136,9 @@ public class Resty {
 	}
 
 	/**
-	 * 
+	 *
 	 * @see Resty#authenticate(URI, String, char[])
-	 * 
+	 *
 	 * @param string
 	 * @param aLogin
 	 * @param charArray
@@ -151,12 +146,12 @@ public class Resty {
 	public void authenticate(String string, String aLogin, char[] charArray) {
 		authenticate(URI.create(string), aLogin, charArray);
 	}
-	
+
 	/**
 	 * Register a login password for the realm returned by the authorization challenge.
 	 * Use this method instead of authenticate in case the URL is not made available to the java.net.Authenticator class
-	 * 
-	 * @param realm the realm (see rfc2617, section 1.2) 
+	 *
+	 * @param realm the realm (see rfc2617, section 1.2)
 	 * @param aLogin
 	 * @param charArray
 	 */
@@ -174,7 +169,7 @@ public class Resty {
 
 	/**
 	 * Sets the User-Agent to Resty. WHICH IS THE DEFAULT. Sorry for yelling.
-	 * 
+	 *
 	 */
 	public Resty identifyAsResty() {
 		userAgent = DEFAULT_USER_AGENT;
@@ -183,7 +178,7 @@ public class Resty {
 
 	/**
 	 * GET a URI given by string and parse the result as JSON.
-	 * 
+	 *
 	 * @param string
 	 *          - the string to use as URI
 	 * @see Resty#json(URI) for more docs
@@ -194,7 +189,7 @@ public class Resty {
 
 	/**
 	 * GET a URI and parse the result as JSON.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to request
 	 * @return the JSONObject, wrapped in a neat JSONResource
@@ -210,7 +205,7 @@ public class Resty {
 
 	/**
 	 * POST to a URI and parse the result as JSON
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to visit
 	 * @param requestContent
@@ -230,7 +225,7 @@ public class Resty {
 
 	/**
 	 * Get a plain text resource for the specified URI.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to follow
 	 * @return a plain text resource, if available
@@ -247,7 +242,7 @@ public class Resty {
 
 	/**
 	 * Get a plain text resource for the specified URI by POSTing to it.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to follow
 	 * @return a plain text resource, if available
@@ -260,7 +255,7 @@ public class Resty {
 
 	/**
 	 * Get a plain text resource for the specified URI.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to follow
 	 * @return a plain text resource, if available
@@ -273,7 +268,7 @@ public class Resty {
 
 	/**
 	 * Get a plain text resource for the specified URI by POSTing to it.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to follow
 	 * @return a plain text resource, if available
@@ -286,7 +281,7 @@ public class Resty {
 
 	/**
 	 * GET a URI given by string and parse the result as XML.
-	 * 
+	 *
 	 * @param string
 	 *          - the string to use as URI
 	 * @see Resty#xml(URI) for more docs
@@ -297,7 +292,7 @@ public class Resty {
 
 	/**
 	 * GET a URI and parse the result as XML.
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to request
 	 * @return the XML, wrapped in a neat XMLResource
@@ -313,7 +308,7 @@ public class Resty {
 
 	/**
 	 * POST to a URI and parse the result as XML
-	 * 
+	 *
 	 * @param anUri
 	 *          the URI to visit
 	 * @param requestContent
@@ -333,7 +328,7 @@ public class Resty {
 
 	/**
 	 * Get the resource specified by the uri and return a binary resource for it.
-	 * 
+	 *
 	 * @param anUri
 	 *          the uri to follow
 	 * @return
@@ -345,7 +340,7 @@ public class Resty {
 
 	/**
 	 * Get the resource specified by the uri and return a binary resource for it.
-	 * 
+	 *
 	 * @param uri
 	 *          the uri to follow
 	 * @return
@@ -361,7 +356,7 @@ public class Resty {
 
 	/**
 	 * POST to the URI and get the resource as binary resource.
-	 * 
+	 *
 	 * @param anUri
 	 *          the uri to follow
 	 * @return
@@ -373,7 +368,7 @@ public class Resty {
 
 	/**
 	 * POST to the URI and get the resource as binary resource.
-	 * 
+	 *
 	 * @param uri
 	 *          the uri to follow
 	 * @return
@@ -419,7 +414,7 @@ public class Resty {
 
 	/**
 	 * Get the content from the URLConnection, create a Resource representing the content and carry over some metadata like HTTP Result and location header.
-	 * 
+	 *
 	 * @param <T extends AbstractResource> the resource that will be created and filled
 	 * @param con
 	 *          the URLConnection used to get the data
@@ -439,9 +434,9 @@ public class Resty {
 	 * <code>
 	 * Resty r = new Resty();
 	 * r.json(someUrl).json(path("path.to.url.in.json"));
-	 * 
+	 *
 	 * </code>
-	 * 
+	 *
 	 * @param string
 	 * @return
 	 */
@@ -452,7 +447,7 @@ public class Resty {
 	/**
 	 * Create an XPathQuery to extract data from an XML document. This is usually used to extract a URI and use it in json|text|xml(XPathQuery...) methods. In this case, your XPath must result in a
 	 * String value, i.e. it can't just extract an Element.
-	 * 
+	 *
 	 * @param anXPathExpression
 	 *          an XPath expression with result type String
 	 * @return the query
@@ -464,7 +459,7 @@ public class Resty {
 
 	/**
 	 * Create a content object from JSON. Use this to POST the content to a URL.
-	 * 
+	 *
 	 * @param someJson
 	 *          the JSON to use
 	 * @return the content to send
@@ -480,7 +475,7 @@ public class Resty {
 
 	/**
 	 * Create a content object from plain text. Use this to POST the content to a URL.
-	 * 
+	 *
 	 * @param somePlainText
 	 *          the plain text to send
 	 * @return the content to send
@@ -496,7 +491,7 @@ public class Resty {
 
 	/**
 	 * Create a content object from a byte array. Use this to POST the content to a URL with mime type application/octet-stream.
-	 * 
+	 *
 	 * @param bytes
 	 *          the bytes to send
 	 * @return the content to send
@@ -504,10 +499,10 @@ public class Resty {
 	public static Content content(byte[] bytes) {
 		return new Content("application/octet-stream", bytes);
 	}
-	
+
 	/**
 	 * Create form content as application/x-www-form-urlencoded (i.e. a=b&c=d&...)
-	 * 
+	 *
 	 * @param query
 	 *          the preformatted, properly encoded form data
 	 * @return a content object to be useable for upload
@@ -519,8 +514,8 @@ public class Resty {
 
 	/**
 	 * Create form content to be sent as multipart/form-data. Useful if you want to upload files or have tons of form data that looks really ugly in a URL.
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public static MultipartContent form(FormData... formData) {
 		MultipartContent mc = new MultipartContent("form-data", formData);
@@ -529,7 +524,7 @@ public class Resty {
 
 	/**
 	 * Create a plain/text form data entry for a multipart form.
-	 * 
+	 *
 	 * @param name
 	 *          the name of the control of the form
 	 * @param plainTextValue
@@ -542,7 +537,7 @@ public class Resty {
 
 	/**
 	 * Create a form data entry for a multipart form with any kind of content type.
-	 * 
+	 *
 	 * @param name
 	 *          the name of the control or variable in a form
 	 * @param content
@@ -557,7 +552,7 @@ public class Resty {
 
 	/**
 	 * Shortcut to URLEncoder.encode with UTF-8.
-	 * 
+	 *
 	 * @param unencodedString
 	 *          the string to encode
 	 * @return the URL encoded string, safe to be used in URLs
@@ -587,7 +582,7 @@ public class Resty {
 	/**
 	 * Tell Resty to send the specified header with each request done on this instance. These headers will also be sent from any resource object returned by this instance. I.e. chained calls will carry
 	 * over the headers r.json(url).json(get("some.path.to.a.url")); Multiple headers of the same type are not supported (yet).
-	 * 
+	 *
 	 * @deprecated
 	 * @param aHeader
 	 *          the header to send
@@ -601,7 +596,7 @@ public class Resty {
 	/**
 	 * Tell Resty to send the specified header with each request done on this instance. These headers will also be sent from any resource object returned by this instance. I.e. chained calls will carry
 	 * over the headers r.json(url).json(get("some.path.to.a.url")); Multiple headers of the same type are not supported (yet).
-	 * 
+	 *
 	 * @param aHeader
 	 *          the header to send
 	 * @param aValue
@@ -610,10 +605,10 @@ public class Resty {
 	public void withHeader(String aHeader, String aValue) {
 		getAdditionalHeaders().put(aHeader, aValue);
 	}
-	
+
 	/**
 	 * Don't send a header that was formely added in the alwaysSend method.
-	 * 
+	 *
 	 * @param aHeader
 	 *          the header to remove
 	 */
@@ -628,35 +623,26 @@ public class Resty {
 		return additionalHeaders;
 	}
 
-	/** Install a SSL socket factory which will trust all certificates. 
-	 * This is generally considered dangerous as you won't know if you are really talking to the server you think you are talking to.
-	 * This is like your best friend using his Facebook account in an Apple store and forgetting to log out. 
-	 * 
-	 * This method should be called once and replaces the SSL factory for ALL HttpsURLConnections.
-	 */
-	public static void ignoreAllCerts() {
-		TrustManager trm = new X509TrustManager() {
-			public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-			public void checkServerTrusted(X509Certificate[] certs, String authType) {}
-			public X509Certificate[] getAcceptedIssuers() {	return null; }
-		};
+    /**
+     * Defines the HttpsURLConnection's default SSLSocketFactory and HostnameVerifier so that all subsequence HttpsURLConnection instances
+     * will trusts all certificates and accept all certificate hostnames.
+     * <p/>
+     * WARNING: Using this is dangerous as it bypasses most of what ssl certificates are made for. However, self-signed certificate, testing, and
+     * domains with multiple sub-domains will not fail handshake verification when this setting is applied.
+     */
+    public static void ignoreAllCerts() {
+        try {
+            HttpsURLConnection.setDefaultSSLSocketFactory(TrustAllX509SocketFactory.getSSLSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(AllowAllHostnameVerifier.ALLOW_ALL_HOSTNAMES);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set 'Trust all' default SSL SocketFactory and Hostname Verifier", e);
+        }
+    }
 
-		SSLContext sc;
-		try {
-			sc = SSLContext.getInstance("SSL");
-			sc.init(null, new TrustManager[] { trm }, null);
-			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (KeyManagementException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/** Set the proxy for this instance of Resty.
+    /** Set the proxy for this instance of Resty.
 	 * Note, that the proxy settings will be carried over to Resty instances created by this instance only if you used
 	 * new Resty(Option.proxy(...))!
-	 * 
+	 *
 	 * @param proxyhost name of the host
 	 * @param proxyport port to be used
 	 */
@@ -665,14 +651,14 @@ public class Resty {
 	}
 
 	/**
-	 * Base class for Resty options. You can also create your own options. 
+	 * Base class for Resty options. You can also create your own options.
 	 * Override one of the apply methods to change an object like URLConnection before it is being used.
-	 * 
+	 *
 	 * @author beders
-	 * 
+	 *
 	 */
 	abstract public static class Option {
-		
+
 		/** Override this to get access to the URLConnection before the actual connection is made.
 		 * @param aConnection
 		 */
@@ -686,7 +672,7 @@ public class Resty {
 
 		/**
 		 * Specify the connection timeout in milliseconds.
-		 * Example: <code><pre> new Resty(Option.timeout(3000)); </pre></code> 
+		 * Example: <code><pre> new Resty(Option.timeout(3000)); </pre></code>
 		 * @see java.net.URLConnection#setConnectTimeout(int)
 		 * @param t
 		 *          the timeout
@@ -695,8 +681,8 @@ public class Resty {
 		public static Timeout timeout(int t) {
 			return new Timeout(t);
 		}
-		
-		/** 
+
+		/**
 		 * Set a proxy (overrides standard proxy settings)
 		 * @param aHostName the hostname to use
 		 * @param aPortNumber the port number
@@ -720,7 +706,7 @@ public class Resty {
 		}
 
 	}
-	
+
 	/** Option to set the proxy for a Resty instance.
 	 */
 	public static class Proxy extends Option {
@@ -735,4 +721,5 @@ public class Resty {
 			resty.setProxy(host,port);
 		}
 	}
+
 }
