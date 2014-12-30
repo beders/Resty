@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.xpath.XPathException;
 
+import us.monoid.json.JSONArray;
 import us.monoid.json.JSONObject;
 import us.monoid.web.auth.RestyAuthenticator;
 import us.monoid.web.mime.MultipartContent;
@@ -458,13 +459,29 @@ public class Resty {
 	}
 
 	/**
-	 * Create a content object from JSON. Use this to POST the content to a URL.
+	 * Create a content object from a JSON object. Use this to POST the content to a URL.
 	 *
 	 * @param someJson
-	 *          the JSON to use
+	 *          the JSON object to use
 	 * @return the content to send
 	 */
 	public static Content content(JSONObject someJson) {
+		Content c = null;
+		try {
+			c = new Content("application/json; charset=UTF-8", someJson.toString().getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) { /* UTF-8 is never unsupported */
+		}
+		return c;
+	}
+
+	/**
+	 * Create a content object from a JSON array. Use this to POST the content to a URL.
+	 *
+	 * @param someJson
+	 *          the JSON array to use
+	 * @return the content to send
+	 */
+	public static Content content(JSONArray someJson) {
 		Content c = null;
 		try {
 			c = new Content("application/json; charset=UTF-8", someJson.toString().getBytes("UTF-8"));
