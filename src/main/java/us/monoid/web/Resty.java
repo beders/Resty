@@ -1,6 +1,7 @@
 package us.monoid.web;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 import java.net.CookieHandler;
@@ -563,6 +564,17 @@ public class Resty {
 	 */
 	public static FormData data(String name, AbstractContent content) {
 		return new FormData(name, content);
+	}
+
+	/**
+	 * Create chunked data
+	 *
+	 * @param mime mime type
+	 * @param stream stream to read content from
+	 * @return
+	 */
+	public static ChunkedContent chunked(String mime, InputStream stream) {
+		return new ChunkedContent(mime, stream);
 	}
 
 	// TODO more form data stuff
